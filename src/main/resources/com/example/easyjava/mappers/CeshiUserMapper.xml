@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.easyjava.mappers.CeshiUserMapper">
+<!--   实体类映射 -->
+	<resultMap id="base_result_map" type="com.example.easyjava.entity.po.CeshiUser">
+		<!--   id -->
+		<id column="id" property="id" />
+		<!--   name -->
+		<result column="name" property="name" />
+		<!--   年龄 -->
+		<result column="age" property="age" />
+		<!--   sex -->
+		<result column="sex" property="sex" />
+		<!--   create -->
+		<result column="createime" property="createime" />
+		<!--   up -->
+		<result column="updatetime" property="updatetime" />
+		<!--   date -->
+		<result column="date" property="date" />
+	</resultMap>
+	<!--   通用查询列 -->
+	<sql id="base_column_list">
+		id,name,age,sex,createime,updatetime,date
+	</sql>
+	<!--   通用基础查询条件 -->
+	<sql id="base_query_condition">
+		<if test="query.id != null ">
+			and id = #{query.id}
+		</if>
+		<if test="query.name != null and query.name != ''  ">
+			and name = #{query.name}
+		</if>
+		<if test="query.age != null ">
+			and age = #{query.age}
+		</if>
+		<if test="query.sex != null ">
+			and sex = #{query.sex}
+		</if>
+		<if test="query.createime != null ">
+			and createime = #{query.createime}
+		</if>
+		<if test="query.updatetime != null ">
+			and updatetime = #{query.updatetime}
+		</if>
+		<if test="query.date != null ">
+			and date = #{query.date}
+		</if>
+	</sql>
+	<!--   通用扩展查询条件 -->
+	<sql id="base_query_condition_extend">
+			<if test= "query.nameFuzzy != null and query.nameFuzzy!= '' ">
+				and name like concat('%', #{query.nameFuzzy},'%')
+			</if>
+			<if test= "query.createimeStart != null and query.createimeStart!= '' ">
+				 <![CDATA[ and createime >= str_to_date(#{createimeStart}, '%y-%m-%d' ) ]]>
+			</if>
+			<if test= "query.createimeEnd != null and query.createimeEnd!= '' ">
+				 <![CDATA[ and createime < date_sub( str_to_date(#{createimeEnd}, '%y-%m-%d' ),interval -1 day) ]]>
+			</if>
+			<if test= "query.updatetimeStart != null and query.updatetimeStart!= '' ">
+				 <![CDATA[ and updatetime >= str_to_date(#{updatetimeStart}, '%y-%m-%d' ) ]]>
+			</if>
+			<if test= "query.updatetimeEnd != null and query.updatetimeEnd!= '' ">
+				 <![CDATA[ and updatetime < date_sub( str_to_date(#{updatetimeEnd}, '%y-%m-%d' ),interval -1 day) ]]>
+			</if>
+			<if test= "query.dateStart != null and query.dateStart!= '' ">
+				 <![CDATA[ and date >= str_to_date(#{dateStart}, '%y-%m-%d' ) ]]>
+			</if>
+			<if test= "query.dateEnd != null and query.dateEnd!= '' ">
+				 <![CDATA[ and date < date_sub( str_to_date(#{dateEnd}, '%y-%m-%d' ),interval -1 day) ]]>
+			</if>
+	</sql>
+	<!--   扩展查询条件汇总 -->
+	<sql id="query_condition">
+		<where>
+			<include refid="base_query_condition"/>
+			<include refid="base_query_condition_extend"/>
+		</where>
+	</sql>
+<!--   查询集合 -->
+	<select id="selectList" resultMap="base_result_map">
+		SELECT <include refid="base_column_list" /> FROM demo_ceshi_user <include refid="query_condition"/>
+		<if test="query.orderBy != null"> order by ${query.orderBy} </if>
+
+		<if test="query.simplePage != null"> limit #{query.simplePage.start},#{query.simplePage.end} </if>
+
+	</select>
+<!--   查询数量 -->
+	<select id="selectCount" resultType="java.lang.Long">
+		select count(1) from demo_ceshi_user
+		<include refid="query_condition"/>
+	</select>
+</mapper>

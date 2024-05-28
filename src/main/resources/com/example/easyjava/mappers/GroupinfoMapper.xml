@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.easyjava.mappers.GroupinfoMapper">
+<!--   实体类映射 -->
+	<resultMap id="base_result_map" type="com.example.easyjava.entity.po.Groupinfo">
+		<!--   群组id -->
+		<id column="groupid" property="groupid" />
+		<!--   群组名称 -->
+		<result column="groupname" property="groupname" />
+		<!--   群主id -->
+		<result column="groupownerid" property="groupownerid" />
+		<!--   创建时间 -->
+		<result column="createtime" property="createtime" />
+		<!--   群公告 -->
+		<result column="groupnotice" property="groupnotice" />
+		<!--   0直接加入2需要同意 -->
+		<result column="jointype" property="jointype" />
+		<!--   1正常0解散 -->
+		<result column="status" property="status" />
+	</resultMap>
+	<!--   通用查询列 -->
+	<sql id="base_column_list">
+		groupid,groupname,groupownerid,createtime,groupnotice,jointype,status
+	</sql>
+	<!--   通用基础查询条件 -->
+	<sql id="base_query_condition">
+		<if test="query.groupid != null and query.groupid != ''  ">
+			and groupid = #{query.groupid}
+		</if>
+		<if test="query.groupname != null and query.groupname != ''  ">
+			and groupname = #{query.groupname}
+		</if>
+		<if test="query.groupownerid != null and query.groupownerid != ''  ">
+			and groupownerid = #{query.groupownerid}
+		</if>
+		<if test="query.createtime != null ">
+			and createtime = #{query.createtime}
+		</if>
+		<if test="query.groupnotice != null and query.groupnotice != ''  ">
+			and groupnotice = #{query.groupnotice}
+		</if>
+		<if test="query.jointype != null ">
+			and jointype = #{query.jointype}
+		</if>
+		<if test="query.status != null ">
+			and status = #{query.status}
+		</if>
+	</sql>
+	<!--   通用扩展查询条件 -->
+	<sql id="base_query_condition_extend">
+			<if test= "query.groupidFuzzy != null and query.groupidFuzzy!= '' ">
+				and groupid like concat('%', #{query.groupidFuzzy},'%')
+			</if>
+			<if test= "query.groupnameFuzzy != null and query.groupnameFuzzy!= '' ">
+				and groupname like concat('%', #{query.groupnameFuzzy},'%')
+			</if>
+			<if test= "query.groupowneridFuzzy != null and query.groupowneridFuzzy!= '' ">
+				and groupownerid like concat('%', #{query.groupowneridFuzzy},'%')
+			</if>
+			<if test= "query.createtimeStart != null and query.createtimeStart!= '' ">
+				 <![CDATA[ and createtime >= str_to_date(#{createtimeStart}, '%y-%m-%d' ) ]]>
+			</if>
+			<if test= "query.createtimeEnd != null and query.createtimeEnd!= '' ">
+				 <![CDATA[ and createtime < date_sub( str_to_date(#{createtimeEnd}, '%y-%m-%d' ),interval -1 day) ]]>
+			</if>
+			<if test= "query.groupnoticeFuzzy != null and query.groupnoticeFuzzy!= '' ">
+				and groupnotice like concat('%', #{query.groupnoticeFuzzy},'%')
+			</if>
+	</sql>
+	<!--   扩展查询条件汇总 -->
+	<sql id="query_condition">
+		<where>
+			<include refid="base_query_condition"/>
+			<include refid="base_query_condition_extend"/>
+		</where>
+	</sql>
+<!--   查询集合 -->
+	<select id="selectList" resultMap="base_result_map">
+		SELECT <include refid="base_column_list" /> FROM groupinfo <include refid="query_condition"/>
+		<if test="query.orderBy != null"> order by ${query.orderBy} </if>
+
+		<if test="query.simplePage != null"> limit #{query.simplePage.start},#{query.simplePage.end} </if>
+
+	</select>
+<!--   查询数量 -->
+	<select id="selectCount" resultType="java.lang.Long">
+		select count(1) from groupinfo
+		<include refid="query_condition"/>
+	</select>
+</mapper>
