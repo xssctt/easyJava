@@ -53,6 +53,7 @@ public class BuildMapper {
             bufferedWriter.write("import org.apache.ibatis.annotations.Param;");
             bufferedWriter.newLine();
 
+
 //            for (Map.Entry<String, List<FieIdInfo>> entry:  tableInfo.getKeyIndexMap().entrySet()) {
 //
 //                //唯一索引的字段信息

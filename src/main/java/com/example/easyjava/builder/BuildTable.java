@@ -72,6 +72,7 @@ public class BuildTable {
                 //logger.info("tableNAme:{},Comment{}",tableName,comment);
 
                 //初始化beanname
+
                 String beanName=tableName;
 
 
@@ -89,7 +90,9 @@ public class BuildTable {
 
 
                 TableInfo tableInfo=new TableInfo();
+                // 数据库的name
                 tableInfo.setTableName(tableName);
+                //beanName   java
                 tableInfo.setBeanName(beanName);
                 tableInfo.setComment(comment);
                 tableInfo.setBeanParamName(beanName+Constants.SUFFIX_BEAN_QUERY);
@@ -200,10 +203,13 @@ public class BuildTable {
                 fieIdInfoList.add(fieIdInfo);
 
 //                -----------------------------------------
+
+                //数据库的
                 fieIdInfo.setFieIdName(field);
                 fieIdInfo.setComment(comment);
                 fieIdInfo.setSqlType(type);
                 fieIdInfo.setAutoIncrement("auto_increment".equals(extra) ? true : false);
+                //java 字段
                 fieIdInfo.setPropertyName(propertyName);
                 fieIdInfo.setJavaType(processJavaType(type));
 //                -----------------------------------------

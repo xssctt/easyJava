@@ -87,13 +87,26 @@ select count(1) from table
 
                 on DUPLICATE key update
 
-        <foreach collection="list" item="item" separator=",">
+        <foreach collection="list" item="item" separator="," open="(" close=")">
             (
             #{item.},#{item.}
             )
         </foreach>
 
     </insert>
+
+    <update id="updateById" parameterType="poClass">
+        UPDATE  table
+        <set>
+            <if test="bean.id != null" >
+                filedid=#{bean.propreid}
+            </if>
+        </set>
+    </update>
+
+    <delete id="deleteBy"+methodName" parameterType="">
+
+    </delete>
 
 
 </mapper>

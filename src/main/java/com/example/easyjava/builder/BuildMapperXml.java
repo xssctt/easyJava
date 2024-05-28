@@ -33,6 +33,10 @@ public class BuildMapperXml {
     private static final String INSERT="insert";
     private static final String INSERT_OR_UPDATE="insertOrUpdate";
     private static final String INSERT_BATCH_ID="insertBatch";
+    private static final String INSERT_OR_UPDATE_BATCH_ID="insertOrUpdateBatch";
+    private static final String UPDATE_BY_ID="updateById";
+
+
 
     private static final String BASE_RESULT_MAP="base_result_map";
 
@@ -120,7 +124,11 @@ public class BuildMapperXml {
             //批量插入
             insertBatch(bufferedWriter,tableInfo,INSERT_BATCH_ID,poClass);
 
+            //批量插入或者更新数据
+            insertBatchOrUpdate(bufferedWriter,tableInfo,INSERT_OR_UPDATE_BATCH_ID,poClass);
 
+            //
+            byIndexChange(bufferedWriter,tableInfo,BASE_RESULT_MAP,BASE_COLUMN_LIST,poClass);
 
             bufferedWriter.write("</mapper>");
             bufferedWriter.newLine();
@@ -181,6 +189,7 @@ public class BuildMapperXml {
             }
 
         }
+
         for (FieIdInfo f: tableInfo.getFieIddList()) {
             if(idField != null && f.getPropertyName().equals(idField.getPropertyName())){
                 bufferedWriter.write("\t\t"+"<!--   "+f.getComment()+" -->");
@@ -231,6 +240,7 @@ public class BuildMapperXml {
 
     }
 
+
     private static void baseQueryCondition(BufferedWriter bufferedWriter,TableInfo tableInfo,String base_query_condition) throws IOException{
 
         bufferedWriter.write("\t"+"<!--   通用基础查询条件 -->");
@@ -252,7 +262,7 @@ public class BuildMapperXml {
             bufferedWriter.write("\t\t"+"<if test=\"query."+f.getPropertyName()+" != null"+stringQuery+" \">");
             bufferedWriter.newLine();
 
-            bufferedWriter.write("\t\t\t"+"and "+f.getPropertyName()+" = #{query."+f.getPropertyName()+"}");
+            bufferedWriter.write("\t\t\t"+"and "+f.getFieIdName()+" = #{query."+f.getPropertyName()+"}");
             bufferedWriter.newLine();
 
             bufferedWriter.write("\t\t"+"</if>");
@@ -265,6 +275,7 @@ public class BuildMapperXml {
         bufferedWriter.newLine();
 
     }
+
 
     private static void queryConditionExtend(BufferedWriter bufferedWriter,TableInfo tableInfo,String base_query_condition_extend) throws IOException{
         bufferedWriter.write("\t"+"<!--   通用扩展查询条件 -->");
@@ -294,6 +305,7 @@ public class BuildMapperXml {
                 }
             }
 
+
             bufferedWriter.write("\t\t\t"+"<if test= \"query."+f.getPropertyName()+" != null and query."+f.getPropertyName()+ "!= '' \">");
             bufferedWriter.newLine();
 
@@ -310,6 +322,8 @@ public class BuildMapperXml {
 
 
     }
+
+
     private static void querycondition(BufferedWriter bufferedWriter,String query_condition,String base_query_condition,String base_query_condition_extend) throws IOException {
 
         bufferedWriter.write("\t" + "<!--   扩展查询条件汇总 -->");
@@ -329,6 +343,7 @@ public class BuildMapperXml {
         bufferedWriter.newLine();
 
     }
+
 
     private static void selectList(BufferedWriter bufferedWriter,TableInfo tableInfo,
                                    String selectListId, String base_result_map,
@@ -468,7 +483,7 @@ public class BuildMapperXml {
 
             bufferedWriter.write("\t\t\t"+"<if test=\"bean."+f.getPropertyName()+" != null\"> ");
             bufferedWriter.newLine();
-            bufferedWriter.write("\t\t\t\t#{bean."+f.getFieIdName()+"},");
+            bufferedWriter.write("\t\t\t\t#{bean."+f.getPropertyName()+"},");
             bufferedWriter.newLine();
             bufferedWriter.write("\t\t\t"+"</if>");
             bufferedWriter.newLine();
@@ -486,8 +501,8 @@ public class BuildMapperXml {
     private static void insertOrUpdate(BufferedWriter bufferedWriter,TableInfo tableInfo,
                                String insertOrUpdateId,String poClass) throws IOException{
 
-        //插入数据
-        bufferedWriter.write("<!--   插入数据 -->");
+        //插入或者更新数据
+        bufferedWriter.write("<!--   插入或者更新数据 -->");
         bufferedWriter.newLine();
 
 
@@ -539,7 +554,7 @@ public class BuildMapperXml {
 
             bufferedWriter.write("\t\t\t"+"<if test=\"bean."+f.getPropertyName()+" != null\"> ");
             bufferedWriter.newLine();
-            bufferedWriter.write("\t\t\t\t#{bean."+f.getFieIdName()+"},");
+            bufferedWriter.write("\t\t\t\t#{bean."+f.getPropertyName()+"},");
             bufferedWriter.newLine();
             bufferedWriter.write("\t\t\t"+"</if>");
             bufferedWriter.newLine();
@@ -618,12 +633,16 @@ public class BuildMapperXml {
         Integer dex=0;
         for (FieIdInfo f: tableInfo.getFieIddList()) {
             dex++;
+            //如果id自增长 跳过
+            if(f.getAutoIncrement()){
+                continue;
+            }
             stringItem.append(f.getFieIdName());
             if(dex < tableInfo.getFieIddList().size()){
                 stringItem.append(",");
             }
         }
-        stringItem.append(")");
+        stringItem.append(") values");
         //插入语句
         //INSERT INTO table()
         bufferedWriter.write("\t\t"+"INSERT INTO  "+tableInfo.getTableName()+stringItem);
@@ -637,25 +656,32 @@ public class BuildMapperXml {
         //            #{item.appid},#{item.}
         //            )
         //        </foreach>
-        bufferedWriter.write("\t\t"+"<foreach collection=\"list\" item=\"item\" separator=\",\">");
+        //   open="("  close=")"      bufferedWriter.write("\t\t"+"(");    bufferedWriter.newLine();
+        bufferedWriter.write("\t\t"+"<foreach collection=\"list\" item=\"item\" separator=\",\" open=\"(\" close=\")\">");
         bufferedWriter.newLine();
+
+
         StringBuilder stringValues=new StringBuilder();
         Integer dexa=0;
         for (FieIdInfo f: tableInfo.getFieIddList()) {
             dexa++;
+            //如果id自增长 跳过
+            if(f.getAutoIncrement()){
+                continue;
+            }
             stringValues.append("#{item.");
-            stringValues.append(f.getFieIdName());
+            stringValues.append(f.getPropertyName());
             stringValues.append("}");
             if(dexa < tableInfo.getFieIddList().size()){
                 stringValues.append(",");
             }
         }
-        bufferedWriter.write("\t\t"+"(");
-        bufferedWriter.newLine();
+//        bufferedWriter.write("\t\t"+"(");
+//        bufferedWriter.newLine();
         bufferedWriter.write("\t\t"+stringValues);
         bufferedWriter.newLine();
-        bufferedWriter.write("\t\t"+")");
-        bufferedWriter.newLine();
+//        bufferedWriter.write("\t\t"+")");
+//        bufferedWriter.newLine();
         bufferedWriter.write("\t\t"+"</foreach>");
         bufferedWriter.newLine();
 
@@ -666,5 +692,437 @@ public class BuildMapperXml {
         bufferedWriter.write("\t"+"</insert>");
         bufferedWriter.newLine();
     }
+
+    private static void insertBatchOrUpdate(BufferedWriter bufferedWriter,TableInfo tableInfo,
+                                    String insertOrUpdateBatchId,String poClass) throws IOException{
+
+        //批量插入或者更新数据
+        bufferedWriter.write("<!--   批量插入或者更新数据 -->");
+        bufferedWriter.newLine();
+        //    <insert id="id" parameterType="type">
+        //    </insert>
+        bufferedWriter.write("\t"+" <insert id=\""+insertOrUpdateBatchId+"\" parameterType=\""+poClass+"\">");
+        bufferedWriter.newLine();
+//---------------------------------------------------------------
+
+
+        StringBuilder stringItem=new StringBuilder();
+        stringItem.append("(");
+//        Integer dex=0;
+//        for (FieIdInfo f: tableInfo.getFieIddList()) {
+//            dex++;
+//            //如果id自增长 跳过
+//            if(f.getAutoIncrement()){
+//                continue;
+//            }
+//            stringItem.append(f.getFieIdName());
+//            if(dex < tableInfo.getFieIddList().size()){
+//                stringItem.append(",");
+//            }
+//        }
+        String filedString = getFiledStringFieldName(tableInfo, "", "", true);
+        stringItem.append(filedString);
+        stringItem.append(") values");
+        //插入语句
+        //INSERT INTO table()
+        bufferedWriter.write("\t\t"+"INSERT INTO  "+tableInfo.getTableName()+stringItem);
+        bufferedWriter.newLine();
+
+
+
+
+        // <foreach collection="list" item="item" separator=",">
+        //            (
+        //            #{item.appid},#{item.}
+        //            )
+        //        </foreach>
+        bufferedWriter.write("\t\t"+"<foreach collection=\"list\" item=\"item\" separator=\",\" open=\"(\" close=\")\">");
+        bufferedWriter.newLine();
+
+
+//        StringBuilder stringValues=new StringBuilder();
+//        Integer dexa=0;
+//        for (FieIdInfo f: tableInfo.getFieIddList()) {
+//            dexa++;
+//            //如果id自增长 跳过
+//            if(f.getAutoIncrement()){
+//                continue;
+//            }
+//            stringValues.append("#{item.");
+//            stringValues.append(f.getPropertyName());
+//            stringValues.append("}");
+//            if(dexa < tableInfo.getFieIddList().size()){
+//                stringValues.append(",");
+//            }
+//        }
+        String stringValues=getFiledStringPropertyName(tableInfo,"#{item.","}",true);
+
+
+//        bufferedWriter.write("\t\t"+"(");
+//        bufferedWriter.newLine();
+        bufferedWriter.write("\t\t"+stringValues);
+        bufferedWriter.newLine();
+//        bufferedWriter.write("\t\t"+")");
+//        bufferedWriter.newLine();
+        bufferedWriter.write("\t\t"+"</foreach>");
+        bufferedWriter.newLine();
+
+
+//---------------------------------------------------------------
+
+
+//        on DUPLICATE key update
+        // 注意，ON DUPLICATE KEY UPDATE 只在唯一索引或主键冲突时起作用，如果没有重复键冲突，则会执行插入操作。
+        bufferedWriter.write("\t\t"+"on DUPLICATE key update");
+        bufferedWriter.newLine();
+
+//---------------------------------------------------------------
+
+        //获取索引字段的字段信息
+//        Map<String, List<FieIdInfo>> keyIndexMap = tableInfo.getKeyIndexMap();
+//        Map<String,String> keyTemp=new HashMap<>();
+//        for (Map.Entry<String, List<FieIdInfo>> entry: keyIndexMap.entrySet()) {
+//            List<FieIdInfo> infos=entry.getValue();
+//            for (FieIdInfo f:infos) {
+//                keyTemp.put(f.getFieIdName(),f.getFieIdName());
+//            }
+//
+//        }
+
+        int inda=0;
+        StringBuilder duplicateString=new StringBuilder();
+        for (FieIdInfo f: tableInfo.getFieIddList()) {
+            //去除 索引字段的更新权限
+//            if(keyTemp.get(f.getFieIdName()) != null){
+//                continue;
+//            }
+//            bufferedWriter.write("\t\t\t"+f.getFieIdName()+"= VALUES("+f.getFieIdName()+"),");
+            duplicateString.append("\t\t"+f.getFieIdName()+"= VALUES("+f.getFieIdName()+")");
+            if(inda < tableInfo.getFieIddList().size()){
+                duplicateString.append(",\n");
+            }
+        }
+
+        bufferedWriter.write(String.valueOf(duplicateString));
+        bufferedWriter.newLine();
+
+
+        bufferedWriter.write("\t"+"</insert>");
+        bufferedWriter.newLine();
+    }
+
+
+
+    private static void update(BufferedWriter bufferedWriter,TableInfo tableInfo,
+                                       String updateId,String poClass) throws IOException{
+
+        //插入或者更新数据
+        bufferedWriter.write("<!--   根据 ID更新数据 -->");
+        bufferedWriter.newLine();
+
+        // <update id="updateById" parameterType="poClass">
+        //        UPDATE  table
+        //        <set>
+        //            <if test="bean.id != null" >
+        //                filedid=#{bean.propreid}
+        //            </if>
+        //        </set>
+        //    </update>
+
+        bufferedWriter.write("\t"+"<update id=\""+updateId+"\" parameterType=\""+poClass+"\">");
+        bufferedWriter.newLine();
+
+        bufferedWriter.write("\t\t"+"UPDATE  "+tableInfo.getTableName()+"");
+        bufferedWriter.newLine();
+
+        bufferedWriter.write("\t\t"+"<set>");
+        bufferedWriter.newLine();
+        for (FieIdInfo f:tableInfo.getFieIddList()) {
+            bufferedWriter.write("\t\t\t"+"<if test=\"bean."+f.getPropertyName()+" != null\" >");
+            bufferedWriter.newLine();
+            bufferedWriter.write("\t\t\t\t"+f.getFieIdName()+"=#{bean."+f.getPropertyName()+"}");
+            bufferedWriter.newLine();
+            bufferedWriter.write("\t\t\t"+" </if>");
+            bufferedWriter.newLine();
+        }
+
+        bufferedWriter.write("\t\t"+"</set>");
+        bufferedWriter.newLine();
+
+
+        bufferedWriter.write("\t"+"</update>");
+        bufferedWriter.newLine();
+    }
+
+    private static void byIndexChange(BufferedWriter bufferedWriter,TableInfo tableInfo,
+                                      String base_result_map,String base_column_list,String poClass) throws IOException{
+
+        Map<String, List<FieIdInfo>> keyIndexMap = tableInfo.getKeyIndexMap();
+
+        for (Map.Entry<String, List<FieIdInfo>> entry: keyIndexMap.entrySet()) {
+
+            //唯一索引的字段信息
+            List<FieIdInfo> keyFieIdInfoList = entry.getValue();
+
+            //*****************
+            Integer index=0;
+            StringBuilder methodName=new StringBuilder();
+
+            StringBuilder paramsName=new StringBuilder();
+
+            //不同的索引 不同的字段   list
+            for (FieIdInfo f:keyFieIdInfoList) {
+                //************
+                index++;
+                methodName.append(StringUtil.upCaseFirstLetter(f.getPropertyName()));
+
+                //where   name=#{f.name}
+                paramsName.append(f.getFieIdName()+ "=#{"+f.getPropertyName()+"}");
+                //索引的字段多 And链接  ************
+                if (index<keyFieIdInfoList.size()){
+                    methodName.append("And");
+                    paramsName.append(" and ");
+                }
+
+            }
+
+
+            //	<select id="selectById"  resultMap="base_result_map">
+            //	select <include refid="base_column_list"/>  from  demo_ceshi_user where id=#{id}
+            //	</select>
+            bufferedWriter.write("<!-- 根据"+methodName+"查询  -->");
+            bufferedWriter.newLine();
+
+            //<select id="checkRepeat" resultType="java.lang.Integer">
+            bufferedWriter.write("\t"+"<select id=\""+"selectBy"+methodName+"\"  resultMap=\""+base_result_map+"\">");
+            bufferedWriter.newLine();
+
+            // "<include refid=\"" + base_query_condition + "\"/>"
+            bufferedWriter.write("\t"+"select <include refid=\"" + base_column_list + "\"/>  from  "+tableInfo.getTableName()+" where "+paramsName);
+            bufferedWriter.newLine();
+
+            bufferedWriter.write("\t"+"</select>");
+            bufferedWriter.newLine();
+            bufferedWriter.newLine();
+
+
+
+            bufferedWriter.write("<!-- 根据"+methodName+"更新-->");
+            bufferedWriter.newLine();
+
+            //<update id="updateById" parameterType="poClass">
+            bufferedWriter.write("\t"+"<update id= \"updateBy"+methodName+"\" parameterType=\""+poClass+"\">");
+            bufferedWriter.newLine();
+
+
+            bufferedWriter.write("\t\t"+"UPDATE  "+tableInfo.getTableName()+"");
+            bufferedWriter.newLine();
+            //set sqlfieldid=bean.values,
+            bufferedWriter.write("\t\t"+"<set>");
+            bufferedWriter.newLine();
+            for (FieIdInfo f:tableInfo.getFieIddList()) {
+                bufferedWriter.write("\t\t\t"+"<if test=\"bean."+f.getPropertyName()+" != null\" >");
+                bufferedWriter.newLine();
+                bufferedWriter.write("\t\t\t\t"+f.getFieIdName()+"=#{bean."+f.getPropertyName()+"}");
+                bufferedWriter.newLine();
+                bufferedWriter.write("\t\t\t"+" </if>");
+                bufferedWriter.newLine();
+            }
+
+            bufferedWriter.write("\t\t"+"</set>");
+            bufferedWriter.newLine();
+            bufferedWriter.write("\t\t"+"where "+paramsName);
+            bufferedWriter.newLine();
+
+
+            bufferedWriter.write("\t"+"</update>");
+            bufferedWriter.newLine();
+            bufferedWriter.newLine();
+
+
+
+            bufferedWriter.write("<!-- 根据"+methodName+"删除-->");
+            bufferedWriter.newLine();
+
+            //<delete id="deleteBy"+methodName" parameterType="">
+            //    </delete>
+            bufferedWriter.write("\t"+"<delete id= \"deleteBy"+methodName+"\" parameterType=\""+BASE_RESULT_INTEGER+"\">");
+            bufferedWriter.newLine();
+
+            bufferedWriter.write("\t\t"+"delete from "+tableInfo.getTableName()+" where "+paramsName);
+            bufferedWriter.newLine();
+
+            bufferedWriter.write("\t"+"</delete>");
+            bufferedWriter.newLine();
+            bufferedWriter.newLine();
+
+        }
+
+
+    }
+
+
+
+//--------------------------------------------------------------------------------------------------------------------
+
+
+    private static void getWriterMapper(BufferedWriter bufferedWriter,TableInfo tableInfo) throws IOException {
+        Map<String, List<FieIdInfo>> keyIndexMap = tableInfo.getKeyIndexMap();
+
+        for (Map.Entry<String, List<FieIdInfo>> entry: keyIndexMap.entrySet()) {
+
+            //唯一索引的字段信息
+            List<FieIdInfo> keyFieIdInfoList = entry.getValue();
+
+            //*****************
+            Integer index=0;
+            StringBuilder methodName=new StringBuilder();
+            StringBuilder methodParams=new StringBuilder();
+
+            //不同的索引 不同的字段list
+            for (FieIdInfo f:keyFieIdInfoList) {
+                //************
+                index++;
+                methodName.append(StringUtil.upCaseFirstLetter(f.getPropertyName()));
+                //索引的字段多 And链接  ************
+                if (index<keyFieIdInfoList.size()){
+                    methodName.append("And");
+                }
+                //   @Param("bean") T t
+                // methodParams.append( "@Param(\""+f.getPropertyName()+"\") "+f.getJavaType()+" " +f.getPropertyName()+",");
+                methodParams.append( "@Param(\""+f.getPropertyName()+"\") "+f.getJavaType()+" " +f.getPropertyName());
+                //**********
+                if (index<keyFieIdInfoList.size()){
+                    methodParams.append(", ");
+                }
+
+            }
+
+
+            BuildComment.createFieldComment(bufferedWriter,"根据"+methodName+"查询");
+            bufferedWriter.newLine();
+            bufferedWriter.write("\t"+"T selectBy"+methodName+"("+methodParams+");");
+            bufferedWriter.newLine();
+            bufferedWriter.newLine();
+
+            BuildComment.createFieldComment(bufferedWriter,"根据"+methodName+"更新");
+            bufferedWriter.newLine();
+            bufferedWriter.write("\t"+"Integer updateBy"+methodName+"(@Param(\"bean\") T t, "+methodParams+");");
+            bufferedWriter.newLine();
+            bufferedWriter.newLine();
+
+            BuildComment.createFieldComment(bufferedWriter,"根据"+methodName+"删除");
+            bufferedWriter.newLine();
+            bufferedWriter.write("\t"+"Integer deleteBy"+methodName+"("+methodParams+");");
+            bufferedWriter.newLine();
+            bufferedWriter.newLine();
+
+        }
+
+    }
+    //------------------------------------------------工具--------------------------------------------------------------------
+
+
+
+
+
+    //获取指定的 字符串拼接
+    private static String getFiledStringPropertyName(TableInfo tableInfo,String headSuff,String lastSuff,Boolean autoIncrement){
+        StringBuilder stringValues=new StringBuilder();
+        Integer dexa=0;
+        for (FieIdInfo f: tableInfo.getFieIddList()) {
+            dexa++;
+            //如果id自增长 跳过
+            if(f.getAutoIncrement() && autoIncrement){
+                continue;
+            }
+            stringValues.append(headSuff);
+            stringValues.append(f.getPropertyName());
+            stringValues.append(lastSuff);
+            if(dexa < tableInfo.getFieIddList().size()){
+                stringValues.append(",");
+            }
+        }
+        return String.valueOf(stringValues);
+    }
+
+
+    private static String getFiledStringFieldName(TableInfo tableInfo,String headSuff,String lastSuff,Boolean autoIncrement){
+        StringBuilder stringValues=new StringBuilder();
+        Integer dexa=0;
+        for (FieIdInfo f: tableInfo.getFieIddList()) {
+            dexa++;
+            //如果id自增长 跳过
+            if(f.getAutoIncrement() && autoIncrement){
+                continue;
+            }
+            stringValues.append(headSuff);
+            stringValues.append(f.getPropertyName());
+            stringValues.append(lastSuff);
+            if(dexa < tableInfo.getFieIddList().size()){
+                stringValues.append(",");
+            }
+        }
+        return String.valueOf(stringValues);
+    }
+
+
+    private static String getFiledAndString(TableInfo tableInfo,String headSuff,String lastSuff,Boolean autoIncrement,String andString){
+        StringBuilder stringValues=new StringBuilder();
+        Integer dexa=0;
+        for (FieIdInfo f: tableInfo.getFieIddList()) {
+            dexa++;
+            //如果id自增长 跳过
+            if(f.getAutoIncrement() && autoIncrement){
+                continue;
+            }
+            stringValues.append(headSuff);
+            stringValues.append(f.getFieIdName()+andString+f.getFieIdName());
+            stringValues.append(lastSuff);
+            if(dexa < tableInfo.getFieIddList().size()){
+                stringValues.append(",");
+            }
+        }
+        return String.valueOf(stringValues);
+    }
+
+    //获取索引字段
+    private static Map<String, String> getKeyMap(TableInfo tableInfo){
+        //获取索引字段的字段信息
+        Map<String, List<FieIdInfo>> keyIndexMap = tableInfo.getKeyIndexMap();
+        Map<String,String> keyTemp=new HashMap<>();
+        for (Map.Entry<String, List<FieIdInfo>> entry: keyIndexMap.entrySet()) {
+            List<FieIdInfo> infos=entry.getValue();
+            for (FieIdInfo f:infos) {
+                keyTemp.put(f.getFieIdName(),f.getFieIdName());
+            }
+
+        }
+        return keyTemp;
+    }
+
+    //找到 PRIMARY
+    private static FieIdInfo getPrimaryFieIdInfo(TableInfo tableInfo){
+        FieIdInfo idField=null;
+        //keyname  字段信息  找到主键
+        Map<String, List<FieIdInfo>> keyIndexMap = tableInfo.getKeyIndexMap();
+        for (Map.Entry<String, List<FieIdInfo>> listEntry :keyIndexMap.entrySet()) {
+
+            if ("PRIMARY".equals(listEntry.getKey())){
+                List<FieIdInfo> fieIdInfos = listEntry.getValue();
+                if (fieIdInfos.size() == 1){
+                    idField = fieIdInfos.get(0);
+                    break;
+                }
+
+            }
+
+        }
+
+        return idField;
+    }
+
+
+
 
 }
