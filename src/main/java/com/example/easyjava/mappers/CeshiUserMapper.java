@@ -7,7 +7,7 @@ import java.util.Date;
 	 *
 	 * @Desoription 用户mappers
 	 * @Auther 摸鱼
-	 * @Date 2024-05-27
+	 * @Date 2024-05-29
 	 */
 public interface CeshiUserMapper<T, P> extends BaseMapper{
 	/** 
@@ -54,23 +54,23 @@ public interface CeshiUserMapper<T, P> extends BaseMapper{
 
 	/** 
 	 *
-	 *  根据CreateimeAndAge查询
+	 *  根据SexAndId查询
 	 */
 
-	T selectByCreateimeAndAge(@Param("createime") Date createime, @Param("age") Integer age);
+	T selectBySexAndId(@Param("sex") Integer sex, @Param("id") Integer id);
 
 	/** 
 	 *
-	 *  根据CreateimeAndAge更新
+	 *  根据SexAndId更新
 	 */
 
-	Integer updateByCreateimeAndAge(@Param("bean") T t, @Param("createime") Date createime, @Param("age") Integer age);
+	Integer updateBySexAndId(@Param("bean") T t, @Param("sex") Integer sex, @Param("id") Integer id);
 
 	/** 
 	 *
-	 *  根据CreateimeAndAge删除
+	 *  根据SexAndId删除
 	 */
 
-	Integer deleteByCreateimeAndAge(@Param("createime") Date createime, @Param("age") Integer age);
+	Integer deleteBySexAndId(@Param("sex") Integer sex, @Param("id") Integer id);
 
 }

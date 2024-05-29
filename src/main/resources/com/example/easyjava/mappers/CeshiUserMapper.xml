@@ -12,7 +12,7 @@
 		<!--   sex -->
 		<result column="sex" property="sex" />
 		<!--   create -->
-		<result column="createime" property="createime" />
+		<result column="createtime" property="createtime" />
 		<!--   up -->
 		<result column="updatetime" property="updatetime" />
 		<!--   date -->
@@ -20,7 +20,7 @@
 	</resultMap>
 	<!--   通用查询列 -->
 	<sql id="base_column_list">
-		id,name,age,sex,createime,updatetime,date
+		id,name,age,sex,createtime,updatetime,date
 	</sql>
 	<!--   通用基础查询条件 -->
 	<sql id="base_query_condition">
@@ -36,8 +36,8 @@
 		<if test="query.sex != null ">
 			and sex = #{query.sex}
 		</if>
-		<if test="query.createime != null ">
-			and createime = #{query.createime}
+		<if test="query.createtime != null ">
+			and createtime = #{query.createtime}
 		</if>
 		<if test="query.updatetime != null ">
 			and updatetime = #{query.updatetime}
@@ -51,23 +51,23 @@
 			<if test= "query.nameFuzzy != null and query.nameFuzzy!= '' ">
 				and name like concat('%', #{query.nameFuzzy},'%')
 			</if>
-			<if test= "query.createimeStart != null and query.createimeStart!= '' ">
-				 <![CDATA[ and createime >= str_to_date(#{createimeStart}, '%y-%m-%d' ) ]]>
+			<if test= "query.createtimeStart != null and query.createtimeStart!= '' ">
+				 <![CDATA[ and createtime >= str_to_date(#{query.createtimeStart}, '%Y-%m-%d' ) ]]>
 			</if>
-			<if test= "query.createimeEnd != null and query.createimeEnd!= '' ">
-				 <![CDATA[ and createime < date_sub( str_to_date(#{createimeEnd}, '%y-%m-%d' ),interval -1 day) ]]>
+			<if test= "query.createtimeEnd != null and query.createtimeEnd!= '' ">
+				 <![CDATA[ and createtime < date_sub( str_to_date(#{query.createtimeEnd}, '%Y-%m-%d' ),interval -1 day) ]]>
 			</if>
 			<if test= "query.updatetimeStart != null and query.updatetimeStart!= '' ">
-				 <![CDATA[ and updatetime >= str_to_date(#{updatetimeStart}, '%y-%m-%d' ) ]]>
+				 <![CDATA[ and updatetime >= str_to_date(#{query.updatetimeStart}, '%Y-%m-%d' ) ]]>
 			</if>
 			<if test= "query.updatetimeEnd != null and query.updatetimeEnd!= '' ">
-				 <![CDATA[ and updatetime < date_sub( str_to_date(#{updatetimeEnd}, '%y-%m-%d' ),interval -1 day) ]]>
+				 <![CDATA[ and updatetime < date_sub( str_to_date(#{query.updatetimeEnd}, '%Y-%m-%d' ),interval -1 day) ]]>
 			</if>
 			<if test= "query.dateStart != null and query.dateStart!= '' ">
-				 <![CDATA[ and date >= str_to_date(#{dateStart}, '%y-%m-%d' ) ]]>
+				 <![CDATA[ and date >= str_to_date(#{query.dateStart}, '%Y-%m-%d' ) ]]>
 			</if>
 			<if test= "query.dateEnd != null and query.dateEnd!= '' ">
-				 <![CDATA[ and date < date_sub( str_to_date(#{dateEnd}, '%y-%m-%d' ),interval -1 day) ]]>
+				 <![CDATA[ and date < date_sub( str_to_date(#{query.dateEnd}, '%Y-%m-%d' ),interval -1 day) ]]>
 			</if>
 	</sql>
 	<!--   扩展查询条件汇总 -->
@@ -90,4 +90,262 @@
 		select count(1) from demo_ceshi_user
 		<include refid="query_condition"/>
 	</select>
+<!--   插入数据 -->
+	 <insert id="insert" parameterType="com.example.easyjava.entity.po.CeshiUser">
+		<selectKey keyProperty="bean.id" resultType="Integer" order="AFTER"> 
+			select LAST_INSERT_ID()
+		</selectKey>
+		INSERT INTO  demo_ceshi_user
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="bean.id != null"> 
+				id,
+			</if>
+			<if test="bean.name != null"> 
+				name,
+			</if>
+			<if test="bean.age != null"> 
+				age,
+			</if>
+			<if test="bean.sex != null"> 
+				sex,
+			</if>
+			<if test="bean.createtime != null"> 
+				createtime,
+			</if>
+			<if test="bean.updatetime != null"> 
+				updatetime,
+			</if>
+			<if test="bean.date != null"> 
+				date,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="bean.id != null"> 
+				#{bean.id},
+			</if>
+			<if test="bean.name != null"> 
+				#{bean.name},
+			</if>
+			<if test="bean.age != null"> 
+				#{bean.age},
+			</if>
+			<if test="bean.sex != null"> 
+				#{bean.sex},
+			</if>
+			<if test="bean.createtime != null"> 
+				#{bean.createtime},
+			</if>
+			<if test="bean.updatetime != null"> 
+				#{bean.updatetime},
+			</if>
+			<if test="bean.date != null"> 
+				#{bean.date},
+			</if>
+		</trim>
+	</insert>
+<!--   插入或者更新数据 -->
+	 <insert id="insertOrUpdate" parameterType="com.example.easyjava.entity.po.CeshiUser">
+		INSERT INTO  demo_ceshi_user
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="bean.id != null"> 
+				id,
+			</if>
+			<if test="bean.name != null"> 
+				name,
+			</if>
+			<if test="bean.age != null"> 
+				age,
+			</if>
+			<if test="bean.sex != null"> 
+				sex,
+			</if>
+			<if test="bean.createtime != null"> 
+				createtime,
+			</if>
+			<if test="bean.updatetime != null"> 
+				updatetime,
+			</if>
+			<if test="bean.date != null"> 
+				date,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="bean.id != null"> 
+				#{bean.id},
+			</if>
+			<if test="bean.name != null"> 
+				#{bean.name},
+			</if>
+			<if test="bean.age != null"> 
+				#{bean.age},
+			</if>
+			<if test="bean.sex != null"> 
+				#{bean.sex},
+			</if>
+			<if test="bean.createtime != null"> 
+				#{bean.createtime},
+			</if>
+			<if test="bean.updatetime != null"> 
+				#{bean.updatetime},
+			</if>
+			<if test="bean.date != null"> 
+				#{bean.date},
+			</if>
+		</trim>
+		on DUPLICATE key update
+		<trim prefix="" suffix="" suffixOverrides=",">
+			<if test="bean.age != null"> 
+				age= VALUES(age),
+			</if>
+			<if test="bean.createtime != null"> 
+				age= VALUES(age),createtime= VALUES(createtime),
+			</if>
+			<if test="bean.updatetime != null"> 
+				age= VALUES(age),createtime= VALUES(createtime),updatetime= VALUES(updatetime),
+			</if>
+			<if test="bean.date != null"> 
+				age= VALUES(age),createtime= VALUES(createtime),updatetime= VALUES(updatetime),date= VALUES(date)
+			</if>
+		</trim>
+	</insert>
+<!--   批量插入数据 -->
+	<insert id="insertBatch" parameterType="com.example.easyjava.entity.po.CeshiUser" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO  demo_ceshi_user(name,age,sex,createtime,updatetime,date) values
+		<foreach collection="list" item="item" separator="," >
+		(
+		#{item.name},#{item.age},#{item.sex},#{item.createtime},#{item.updatetime},#{item.date}
+		)
+		</foreach>
+	</insert>
+<!--   批量插入或者更新数据 -->
+	 <insert id="insertOrUpdateBatch" parameterType="com.example.easyjava.entity.po.CeshiUser">
+		INSERT INTO  demo_ceshi_user(id,name,age,sex,createtime,updatetime,date) values
+		<foreach collection="list" item="item" separator="," >
+		(
+		#{item.id},#{item.name},#{item.age},#{item.sex},#{item.createtime},#{item.updatetime},#{item.date}
+		)
+		</foreach>
+		on DUPLICATE key update
+		age= VALUES(age),
+		createtime= VALUES(createtime),
+		updatetime= VALUES(updatetime),
+		date= VALUES(date)
+	</insert>
+<!-- 根据Id查询  -->
+	<select id="selectById"  resultMap="base_result_map">
+	select <include refid="base_column_list"/>  from  demo_ceshi_user where id=#{id}
+	</select>
+
+<!-- 根据Id更新-->
+	<update id= "updateById" parameterType="com.example.easyjava.entity.po.CeshiUser">
+		UPDATE  demo_ceshi_user
+		<set>
+			<if test="bean.id != null" >
+				id=#{bean.id},
+			 </if>
+			<if test="bean.name != null" >
+				name=#{bean.name},
+			 </if>
+			<if test="bean.age != null" >
+				age=#{bean.age},
+			 </if>
+			<if test="bean.sex != null" >
+				sex=#{bean.sex},
+			 </if>
+			<if test="bean.createtime != null" >
+				createtime=#{bean.createtime},
+			 </if>
+			<if test="bean.updatetime != null" >
+				updatetime=#{bean.updatetime},
+			 </if>
+			<if test="bean.date != null" >
+				date=#{bean.date}
+			 </if>
+		</set>
+		where id=#{id}
+	</update>
+
+<!-- 根据Id删除-->
+	<delete id= "deleteById" parameterType="java.lang.Integer">
+		delete from demo_ceshi_user where id=#{id}
+	</delete>
+
+<!-- 根据IdAndName查询  -->
+	<select id="selectByIdAndName"  resultMap="base_result_map">
+	select <include refid="base_column_list"/>  from  demo_ceshi_user where id=#{id} and name=#{name}
+	</select>
+
+<!-- 根据IdAndName更新-->
+	<update id= "updateByIdAndName" parameterType="com.example.easyjava.entity.po.CeshiUser">
+		UPDATE  demo_ceshi_user
+		<set>
+			<if test="bean.id != null" >
+				id=#{bean.id},
+			 </if>
+			<if test="bean.name != null" >
+				name=#{bean.name},
+			 </if>
+			<if test="bean.age != null" >
+				age=#{bean.age},
+			 </if>
+			<if test="bean.sex != null" >
+				sex=#{bean.sex},
+			 </if>
+			<if test="bean.createtime != null" >
+				createtime=#{bean.createtime},
+			 </if>
+			<if test="bean.updatetime != null" >
+				updatetime=#{bean.updatetime},
+			 </if>
+			<if test="bean.date != null" >
+				date=#{bean.date}
+			 </if>
+		</set>
+		where id=#{id} and name=#{name}
+	</update>
+
+<!-- 根据IdAndName删除-->
+	<delete id= "deleteByIdAndName" parameterType="java.lang.Integer">
+		delete from demo_ceshi_user where id=#{id} and name=#{name}
+	</delete>
+
+<!-- 根据SexAndId查询  -->
+	<select id="selectBySexAndId"  resultMap="base_result_map">
+	select <include refid="base_column_list"/>  from  demo_ceshi_user where sex=#{sex} and id=#{id}
+	</select>
+
+<!-- 根据SexAndId更新-->
+	<update id= "updateBySexAndId" parameterType="com.example.easyjava.entity.po.CeshiUser">
+		UPDATE  demo_ceshi_user
+		<set>
+			<if test="bean.id != null" >
+				id=#{bean.id},
+			 </if>
+			<if test="bean.name != null" >
+				name=#{bean.name},
+			 </if>
+			<if test="bean.age != null" >
+				age=#{bean.age},
+			 </if>
+			<if test="bean.sex != null" >
+				sex=#{bean.sex},
+			 </if>
+			<if test="bean.createtime != null" >
+				createtime=#{bean.createtime},
+			 </if>
+			<if test="bean.updatetime != null" >
+				updatetime=#{bean.updatetime},
+			 </if>
+			<if test="bean.date != null" >
+				date=#{bean.date}
+			 </if>
+		</set>
+		where sex=#{sex} and id=#{id}
+	</update>
+
+<!-- 根据SexAndId删除-->
+	<delete id= "deleteBySexAndId" parameterType="java.lang.Integer">
+		delete from demo_ceshi_user where sex=#{sex} and id=#{id}
+	</delete>
+
 </mapper>

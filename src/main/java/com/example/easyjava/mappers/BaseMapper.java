@@ -57,7 +57,7 @@ public interface BaseMapper<T,P> {
      * @return
      * selectCount:(根据参数查询数量)
      */
-    List<T> selectCount(@Param("query") P p);
+    Long selectCount(@Param("query") P p);
 
 
 }

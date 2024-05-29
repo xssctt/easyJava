@@ -13,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 	 *
 	 * @Desoription 用户
 	 * @Auther 摸鱼
-	 * @Date 2024-05-27
+	 * @Date 2024-05-29
 	 */
 public class CeshiUser implements Serializable{
 	/** 
@@ -47,7 +47,7 @@ public class CeshiUser implements Serializable{
 	 */
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	private Date createime;
+	private Date createtime;
 
 	/** 
 	 *
@@ -97,12 +97,12 @@ public class CeshiUser implements Serializable{
 		return this.sex;
 	}
 
-	public void setCreateime(Date createime) {
-		this.createime=createime;
+	public void setCreatetime(Date createtime) {
+		this.createtime=createtime;
 	}
 
-	public Date getCreateime() {
-		return this.createime;
+	public Date getCreatetime() {
+		return this.createtime;
 	}
 
 	public void setUpdatetime(Date updatetime) {
@@ -128,7 +128,7 @@ public class CeshiUser implements Serializable{
 	 " name : Name='" +(name==null ? "空" : name) + "' "+
 	 " 年龄 : Age='" +(age==null ? "空" : age) + "' "+
 	 " sex : Sex='" +(sex==null ? "空" : sex) + "' "+
-	 " create : Createime='" +(createime==null ? "空" : DateUtils.format(createime,DateTimePatternEnum.YYYY_MM_DD_HH_MM_SS.getPattern())) + "' "+
+	 " create : Createtime='" +(createtime==null ? "空" : DateUtils.format(createtime,DateTimePatternEnum.YYYY_MM_DD_HH_MM_SS.getPattern())) + "' "+
 	 " up : Updatetime='" +(updatetime==null ? "空" : DateUtils.format(updatetime,DateTimePatternEnum.YYYY_MM_DD_HH_MM_SS.getPattern())) + "' "+
 	 " date : Date='" +(date==null ? "空" : DateUtils.format(date,DateTimePatternEnum.YYYY_MM_DD.getPattern())) + "' "+ '}'; 
 	}

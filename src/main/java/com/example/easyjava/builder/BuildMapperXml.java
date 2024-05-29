@@ -9,6 +9,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.swing.text.html.Option;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -587,9 +588,11 @@ public class BuildMapperXml {
 
         }
 
-
+        int indea=0;
+        StringBuilder valuesString=new StringBuilder();
         for (FieIdInfo f: tableInfo.getFieIddList()) {
 
+            indea++;
             //去除 索引字段的更新权限
             if(keyTemp.get(f.getFieIdName()) != null){
                 continue;
@@ -597,7 +600,11 @@ public class BuildMapperXml {
 
             bufferedWriter.write("\t\t\t"+"<if test=\"bean."+f.getPropertyName()+" != null\"> ");
             bufferedWriter.newLine();
-            bufferedWriter.write("\t\t\t\t"+f.getFieIdName()+"= VALUES("+f.getFieIdName()+"),");
+            valuesString.append(f.getFieIdName()+"= VALUES("+f.getFieIdName()+")");
+            if(indea < tableInfo.getFieIddList().size()){
+                valuesString.append(",");
+            }
+            bufferedWriter.write("\t\t\t\t"+valuesString);
             bufferedWriter.newLine();
             bufferedWriter.write("\t\t\t"+"</if>");
             bufferedWriter.newLine();
@@ -657,7 +664,7 @@ public class BuildMapperXml {
         //            )
         //        </foreach>
         //   open="("  close=")"      bufferedWriter.write("\t\t"+"(");    bufferedWriter.newLine();
-        bufferedWriter.write("\t\t"+"<foreach collection=\"list\" item=\"item\" separator=\",\" open=\"(\" close=\")\">");
+        bufferedWriter.write("\t\t"+"<foreach collection=\"list\" item=\"item\" separator=\",\" >");
         bufferedWriter.newLine();
 
 
@@ -676,12 +683,12 @@ public class BuildMapperXml {
                 stringValues.append(",");
             }
         }
-//        bufferedWriter.write("\t\t"+"(");
-//        bufferedWriter.newLine();
+        bufferedWriter.write("\t\t"+"(");
+        bufferedWriter.newLine();
         bufferedWriter.write("\t\t"+stringValues);
         bufferedWriter.newLine();
-//        bufferedWriter.write("\t\t"+")");
-//        bufferedWriter.newLine();
+        bufferedWriter.write("\t\t"+")");
+        bufferedWriter.newLine();
         bufferedWriter.write("\t\t"+"</foreach>");
         bufferedWriter.newLine();
 
@@ -720,7 +727,7 @@ public class BuildMapperXml {
 //                stringItem.append(",");
 //            }
 //        }
-        String filedString = getFiledStringFieldName(tableInfo, "", "", true);
+        String filedString = getFiledStringFieldName(tableInfo, "", "", false);
         stringItem.append(filedString);
         stringItem.append(") values");
         //插入语句
@@ -736,7 +743,7 @@ public class BuildMapperXml {
         //            #{item.appid},#{item.}
         //            )
         //        </foreach>
-        bufferedWriter.write("\t\t"+"<foreach collection=\"list\" item=\"item\" separator=\",\" open=\"(\" close=\")\">");
+        bufferedWriter.write("\t\t"+"<foreach collection=\"list\" item=\"item\" separator=\",\" >");
         bufferedWriter.newLine();
 
 
@@ -755,15 +762,15 @@ public class BuildMapperXml {
 //                stringValues.append(",");
 //            }
 //        }
-        String stringValues=getFiledStringPropertyName(tableInfo,"#{item.","}",true);
+        String stringValues=getFiledStringPropertyName(tableInfo,"#{item.","}",false);
 
 
-//        bufferedWriter.write("\t\t"+"(");
-//        bufferedWriter.newLine();
+        bufferedWriter.write("\t\t"+"(");
+        bufferedWriter.newLine();
         bufferedWriter.write("\t\t"+stringValues);
         bufferedWriter.newLine();
-//        bufferedWriter.write("\t\t"+")");
-//        bufferedWriter.newLine();
+        bufferedWriter.write("\t\t"+")");
+        bufferedWriter.newLine();
         bufferedWriter.write("\t\t"+"</foreach>");
         bufferedWriter.newLine();
 
@@ -789,14 +796,22 @@ public class BuildMapperXml {
 //
 //        }
 
-        int inda=0;
+        Map<String, String> keyMap = getKeyMap(tableInfo);
+
+        Integer inda=0;
         StringBuilder duplicateString=new StringBuilder();
         for (FieIdInfo f: tableInfo.getFieIddList()) {
+            inda++;
             //去除 索引字段的更新权限
 //            if(keyTemp.get(f.getFieIdName()) != null){
 //                continue;
 //            }
 //            bufferedWriter.write("\t\t\t"+f.getFieIdName()+"= VALUES("+f.getFieIdName()+"),");
+
+            if(keyMap.get(f.getFieIdName()) != null){
+                continue;
+            }
+
             duplicateString.append("\t\t"+f.getFieIdName()+"= VALUES("+f.getFieIdName()+")");
             if(inda < tableInfo.getFieIddList().size()){
                 duplicateString.append(",\n");
@@ -920,11 +935,26 @@ public class BuildMapperXml {
             //set sqlfieldid=bean.values,
             bufferedWriter.write("\t\t"+"<set>");
             bufferedWriter.newLine();
+            Integer listindex=0;
+            StringBuilder valueString=new StringBuilder();
             for (FieIdInfo f:tableInfo.getFieIddList()) {
+
+                listindex++;
+
                 bufferedWriter.write("\t\t\t"+"<if test=\"bean."+f.getPropertyName()+" != null\" >");
                 bufferedWriter.newLine();
-                bufferedWriter.write("\t\t\t\t"+f.getFieIdName()+"=#{bean."+f.getPropertyName()+"}");
+                valueString.append(f.getFieIdName()+"=#{bean."+f.getPropertyName()+"}");
+
+                if (listindex < tableInfo.getFieIddList().size()){
+                    valueString.append(",");
+                }
+
+                bufferedWriter.write("\t\t\t\t"+ valueString);
                 bufferedWriter.newLine();
+
+                //每个使用一次  所以清空  对 ,  的美观处理
+                valueString.delete(0, valueString.length());
+
                 bufferedWriter.write("\t\t\t"+" </if>");
                 bufferedWriter.newLine();
             }
@@ -962,65 +992,10 @@ public class BuildMapperXml {
     }
 
 
+    //插入  table()  values()  id自增长 ---》false  id不存在
+    //更新  id自增长 ---》true  需要id
 
-//--------------------------------------------------------------------------------------------------------------------
-
-
-    private static void getWriterMapper(BufferedWriter bufferedWriter,TableInfo tableInfo) throws IOException {
-        Map<String, List<FieIdInfo>> keyIndexMap = tableInfo.getKeyIndexMap();
-
-        for (Map.Entry<String, List<FieIdInfo>> entry: keyIndexMap.entrySet()) {
-
-            //唯一索引的字段信息
-            List<FieIdInfo> keyFieIdInfoList = entry.getValue();
-
-            //*****************
-            Integer index=0;
-            StringBuilder methodName=new StringBuilder();
-            StringBuilder methodParams=new StringBuilder();
-
-            //不同的索引 不同的字段list
-            for (FieIdInfo f:keyFieIdInfoList) {
-                //************
-                index++;
-                methodName.append(StringUtil.upCaseFirstLetter(f.getPropertyName()));
-                //索引的字段多 And链接  ************
-                if (index<keyFieIdInfoList.size()){
-                    methodName.append("And");
-                }
-                //   @Param("bean") T t
-                // methodParams.append( "@Param(\""+f.getPropertyName()+"\") "+f.getJavaType()+" " +f.getPropertyName()+",");
-                methodParams.append( "@Param(\""+f.getPropertyName()+"\") "+f.getJavaType()+" " +f.getPropertyName());
-                //**********
-                if (index<keyFieIdInfoList.size()){
-                    methodParams.append(", ");
-                }
-
-            }
-
-
-            BuildComment.createFieldComment(bufferedWriter,"根据"+methodName+"查询");
-            bufferedWriter.newLine();
-            bufferedWriter.write("\t"+"T selectBy"+methodName+"("+methodParams+");");
-            bufferedWriter.newLine();
-            bufferedWriter.newLine();
-
-            BuildComment.createFieldComment(bufferedWriter,"根据"+methodName+"更新");
-            bufferedWriter.newLine();
-            bufferedWriter.write("\t"+"Integer updateBy"+methodName+"(@Param(\"bean\") T t, "+methodParams+");");
-            bufferedWriter.newLine();
-            bufferedWriter.newLine();
-
-            BuildComment.createFieldComment(bufferedWriter,"根据"+methodName+"删除");
-            bufferedWriter.newLine();
-            bufferedWriter.write("\t"+"Integer deleteBy"+methodName+"("+methodParams+");");
-            bufferedWriter.newLine();
-            bufferedWriter.newLine();
-
-        }
-
-    }
-    //------------------------------------------------工具--------------------------------------------------------------------
+    //
 
 
 
@@ -1085,6 +1060,8 @@ public class BuildMapperXml {
         }
         return String.valueOf(stringValues);
     }
+
+
 
     //获取索引字段
     private static Map<String, String> getKeyMap(TableInfo tableInfo){

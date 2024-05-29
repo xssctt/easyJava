@@ -12,7 +12,7 @@ import com.example.easyjava.Util.DateUtils;
 	 *
 	 * @Desoription 群
 	 * @Auther 摸鱼
-	 * @Date 2024-05-27
+	 * @Date 2024-05-29
 	 */
 public class Groupinfo implements Serializable{
 	/** 

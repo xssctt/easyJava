@@ -47,7 +47,10 @@ public class BuilBase {
         HeadInfoList.add("import "+Constants.PACKAGE_QUERY+".SimplePage"+";");
         build(HeadInfoList,"BaseQuery", Constants.PATH_QUERY);
 
-
+        //生成PaginationResultVo
+        HeadInfoList.clear();
+        HeadInfoList.add("package "+Constants.PACKAGE_VO+";");
+        build(HeadInfoList,"PaginationResultVo", Constants.PATH_VO);
     }
 
     /**

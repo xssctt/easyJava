@@ -58,10 +58,10 @@
 				and groupownerid like concat('%', #{query.groupowneridFuzzy},'%')
 			</if>
 			<if test= "query.createtimeStart != null and query.createtimeStart!= '' ">
-				 <![CDATA[ and createtime >= str_to_date(#{createtimeStart}, '%y-%m-%d' ) ]]>
+				 <![CDATA[ and createtime >= str_to_date(#{query.createtimeStart}, '%Y-%m-%d' ) ]]>
 			</if>
 			<if test= "query.createtimeEnd != null and query.createtimeEnd!= '' ">
-				 <![CDATA[ and createtime < date_sub( str_to_date(#{createtimeEnd}, '%y-%m-%d' ),interval -1 day) ]]>
+				 <![CDATA[ and createtime < date_sub( str_to_date(#{query.createtimeEnd}, '%Y-%m-%d' ),interval -1 day) ]]>
 			</if>
 			<if test= "query.groupnoticeFuzzy != null and query.groupnoticeFuzzy!= '' ">
 				and groupnotice like concat('%', #{query.groupnoticeFuzzy},'%')
@@ -87,4 +87,189 @@
 		select count(1) from groupinfo
 		<include refid="query_condition"/>
 	</select>
+<!--   插入数据 -->
+	 <insert id="insert" parameterType="com.example.easyjava.entity.po.Groupinfo">
+		INSERT INTO  groupinfo
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="bean.groupid != null"> 
+				groupid,
+			</if>
+			<if test="bean.groupname != null"> 
+				groupname,
+			</if>
+			<if test="bean.groupownerid != null"> 
+				groupownerid,
+			</if>
+			<if test="bean.createtime != null"> 
+				createtime,
+			</if>
+			<if test="bean.groupnotice != null"> 
+				groupnotice,
+			</if>
+			<if test="bean.jointype != null"> 
+				jointype,
+			</if>
+			<if test="bean.status != null"> 
+				status,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="bean.groupid != null"> 
+				#{bean.groupid},
+			</if>
+			<if test="bean.groupname != null"> 
+				#{bean.groupname},
+			</if>
+			<if test="bean.groupownerid != null"> 
+				#{bean.groupownerid},
+			</if>
+			<if test="bean.createtime != null"> 
+				#{bean.createtime},
+			</if>
+			<if test="bean.groupnotice != null"> 
+				#{bean.groupnotice},
+			</if>
+			<if test="bean.jointype != null"> 
+				#{bean.jointype},
+			</if>
+			<if test="bean.status != null"> 
+				#{bean.status},
+			</if>
+		</trim>
+	</insert>
+<!--   插入或者更新数据 -->
+	 <insert id="insertOrUpdate" parameterType="com.example.easyjava.entity.po.Groupinfo">
+		INSERT INTO  groupinfo
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="bean.groupid != null"> 
+				groupid,
+			</if>
+			<if test="bean.groupname != null"> 
+				groupname,
+			</if>
+			<if test="bean.groupownerid != null"> 
+				groupownerid,
+			</if>
+			<if test="bean.createtime != null"> 
+				createtime,
+			</if>
+			<if test="bean.groupnotice != null"> 
+				groupnotice,
+			</if>
+			<if test="bean.jointype != null"> 
+				jointype,
+			</if>
+			<if test="bean.status != null"> 
+				status,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="bean.groupid != null"> 
+				#{bean.groupid},
+			</if>
+			<if test="bean.groupname != null"> 
+				#{bean.groupname},
+			</if>
+			<if test="bean.groupownerid != null"> 
+				#{bean.groupownerid},
+			</if>
+			<if test="bean.createtime != null"> 
+				#{bean.createtime},
+			</if>
+			<if test="bean.groupnotice != null"> 
+				#{bean.groupnotice},
+			</if>
+			<if test="bean.jointype != null"> 
+				#{bean.jointype},
+			</if>
+			<if test="bean.status != null"> 
+				#{bean.status},
+			</if>
+		</trim>
+		on DUPLICATE key update
+		<trim prefix="" suffix="" suffixOverrides=",">
+			<if test="bean.groupname != null"> 
+				groupname= VALUES(groupname),
+			</if>
+			<if test="bean.groupownerid != null"> 
+				groupname= VALUES(groupname),groupownerid= VALUES(groupownerid),
+			</if>
+			<if test="bean.createtime != null"> 
+				groupname= VALUES(groupname),groupownerid= VALUES(groupownerid),createtime= VALUES(createtime),
+			</if>
+			<if test="bean.groupnotice != null"> 
+				groupname= VALUES(groupname),groupownerid= VALUES(groupownerid),createtime= VALUES(createtime),groupnotice= VALUES(groupnotice),
+			</if>
+			<if test="bean.jointype != null"> 
+				groupname= VALUES(groupname),groupownerid= VALUES(groupownerid),createtime= VALUES(createtime),groupnotice= VALUES(groupnotice),jointype= VALUES(jointype),
+			</if>
+			<if test="bean.status != null"> 
+				groupname= VALUES(groupname),groupownerid= VALUES(groupownerid),createtime= VALUES(createtime),groupnotice= VALUES(groupnotice),jointype= VALUES(jointype),status= VALUES(status)
+			</if>
+		</trim>
+	</insert>
+<!--   批量插入数据 -->
+	<insert id="insertBatch" parameterType="com.example.easyjava.entity.po.Groupinfo" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO  groupinfo(groupid,groupname,groupownerid,createtime,groupnotice,jointype,status) values
+		<foreach collection="list" item="item" separator="," >
+		(
+		#{item.groupid},#{item.groupname},#{item.groupownerid},#{item.createtime},#{item.groupnotice},#{item.jointype},#{item.status}
+		)
+		</foreach>
+	</insert>
+<!--   批量插入或者更新数据 -->
+	 <insert id="insertOrUpdateBatch" parameterType="com.example.easyjava.entity.po.Groupinfo">
+		INSERT INTO  groupinfo(groupid,groupname,groupownerid,createtime,groupnotice,jointype,status) values
+		<foreach collection="list" item="item" separator="," >
+		(
+		#{item.groupid},#{item.groupname},#{item.groupownerid},#{item.createtime},#{item.groupnotice},#{item.jointype},#{item.status}
+		)
+		</foreach>
+		on DUPLICATE key update
+		groupname= VALUES(groupname),
+		groupownerid= VALUES(groupownerid),
+		createtime= VALUES(createtime),
+		groupnotice= VALUES(groupnotice),
+		jointype= VALUES(jointype),
+		status= VALUES(status)
+	</insert>
+<!-- 根据Groupid查询  -->
+	<select id="selectByGroupid"  resultMap="base_result_map">
+	select <include refid="base_column_list"/>  from  groupinfo where groupid=#{groupid}
+	</select>
+
+<!-- 根据Groupid更新-->
+	<update id= "updateByGroupid" parameterType="com.example.easyjava.entity.po.Groupinfo">
+		UPDATE  groupinfo
+		<set>
+			<if test="bean.groupid != null" >
+				groupid=#{bean.groupid},
+			 </if>
+			<if test="bean.groupname != null" >
+				groupname=#{bean.groupname},
+			 </if>
+			<if test="bean.groupownerid != null" >
+				groupownerid=#{bean.groupownerid},
+			 </if>
+			<if test="bean.createtime != null" >
+				createtime=#{bean.createtime},
+			 </if>
+			<if test="bean.groupnotice != null" >
+				groupnotice=#{bean.groupnotice},
+			 </if>
+			<if test="bean.jointype != null" >
+				jointype=#{bean.jointype},
+			 </if>
+			<if test="bean.status != null" >
+				status=#{bean.status}
+			 </if>
+		</set>
+		where groupid=#{groupid}
+	</update>
+
+<!-- 根据Groupid删除-->
+	<delete id= "deleteByGroupid" parameterType="java.lang.Integer">
+		delete from groupinfo where groupid=#{groupid}
+	</delete>
+
 </mapper>

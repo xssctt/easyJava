@@ -11,6 +11,9 @@ public class Constants {
     public static String SUFFIX_BEAN_QUERY_TIME_START;
     public static String SUFFIX_BEAN_QUERY_TIME_END;
     public static String SUFFIX_MAPPERS;
+    public static String SUFFIX_SERVICE;
+    public static String SUFFIX_SERVICE_IMPL;
+    public static String SUFFIX_BEAN_CONTROLLER;
 
 
     //java resources
@@ -28,6 +31,10 @@ public class Constants {
 // po包路径 和path
     public static String PACKAGE_PO;
     public static String PATH_PO;
+
+    //Vo
+    public static String PACKAGE_VO;
+    public static String PATH_VO;
 //auther
     public static String AUTHER_COMMENT;
 //    ignore.bean.tojson.filed
@@ -59,6 +66,12 @@ public class Constants {
 //    public static String PACKAGE_MAPPERXML;
     public static String PATH_MAPPER_XML;
 
+    public static String PACKAGE_SERVICE;
+    public static String PATH_SERVICE;
+    public static String PACKAGE_SERVICE_IMPL;
+    public static String PATH_SERVICE_IMPL;
+
+
 
 
     static {
@@ -70,6 +83,7 @@ public class Constants {
         PACKAGE_BASE=PropertiesUtil.getString("package.base");
         PACKAGE_PO=PropertiesUtil.getString("package.po");
         PACKAGE_QUERY=PropertiesUtil.getString("package.query");
+        PACKAGE_VO=PropertiesUtil.getString("package.vo");
         AUTHER_COMMENT=PropertiesUtil.getString("auther.comment");
 
         SUFFIX_BEAN_QUERY_FUZZY=PropertiesUtil.getString("suffix.bean.query.fuzzy");
@@ -93,6 +107,12 @@ public class Constants {
         PACKAGE_MAPPERS=PropertiesUtil.getString("package.mappers");
         SUFFIX_MAPPERS=PropertiesUtil.getString("suffix.mappers");
 
+        PACKAGE_SERVICE=PropertiesUtil.getString("package.service");
+        SUFFIX_SERVICE=PropertiesUtil.getString("suffix.service");
+
+        PACKAGE_SERVICE_IMPL=PropertiesUtil.getString("package.service.impl");
+        SUFFIX_SERVICE_IMPL=PropertiesUtil.getString("suffix.service.impl");
+
 //        PACKAGE_MAPPERXML=PropertiesUtil.getString("package.mapperxml");
 
 
@@ -107,6 +127,8 @@ public class Constants {
         PACKAGE_QUERY=PACKAGE_BASE+"."+PACKAGE_QUERY;
         PATH_QUERY=PATH_BASE+"/"+PACKAGE_QUERY.replace(".","/");
 
+        PACKAGE_VO=PACKAGE_BASE+"."+PACKAGE_VO;
+        PATH_VO=PATH_BASE+"/"+PACKAGE_VO.replace(".","/");
 
         PACKAGE_UTILS=PACKAGE_BASE+"."+PACKAGE_UTILS;
         PATH_UTILS=PATH_BASE+"/"+PACKAGE_UTILS.replace(".","/");
@@ -119,6 +141,11 @@ public class Constants {
         PACKAGE_MAPPERS=PACKAGE_BASE+"."+PACKAGE_MAPPERS;
         PATH_MAPPERS=PATH_BASE+"/"+PACKAGE_MAPPERS.replace(".","/");
 
+        PACKAGE_SERVICE=PACKAGE_BASE+"."+PACKAGE_SERVICE;
+        PATH_SERVICE=PATH_BASE+"/"+PACKAGE_SERVICE.replace(".","/");
+
+        PACKAGE_SERVICE_IMPL=PACKAGE_SERVICE+"."+"impl";
+        PATH_SERVICE_IMPL=PATH_BASE+"/"+PACKAGE_SERVICE_IMPL.replace(".","/");
 
 
     }

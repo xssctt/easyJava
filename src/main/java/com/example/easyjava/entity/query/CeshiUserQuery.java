@@ -8,7 +8,7 @@ import com.example.easyjava.entity.query.BaseQuery;
 	 *
 	 * @Desoription 用户查询对象
 	 * @Auther 摸鱼
-	 * @Date 2024-05-27
+	 * @Date 2024-05-29
 	 */
 public class CeshiUserQuery extends BaseQuery{
 	/** 
@@ -41,11 +41,11 @@ public class CeshiUserQuery extends BaseQuery{
 	 *
 	 *  create
 	 */
-	private Date createime;
+	private Date createtime;
 
-	private String createimeStart;
+	private String createtimeStart;
 
-	private String createimeEnd;
+	private String createtimeEnd;
 
 	/** 
 	 *
@@ -99,12 +99,12 @@ public class CeshiUserQuery extends BaseQuery{
 		return this.sex;
 	}
 
-	public void setCreateime(Date createime) {
-		this.createime=createime;
+	public void setCreatetime(Date createtime) {
+		this.createtime=createtime;
 	}
 
-	public Date getCreateime() {
-		return this.createime;
+	public Date getCreatetime() {
+		return this.createtime;
 	}
 
 	public void setUpdatetime(Date updatetime) {
@@ -131,20 +131,20 @@ public class CeshiUserQuery extends BaseQuery{
 		return this.nameFuzzy;
 	}
 
-	public void setCreateimeStart(String createimeStart) {
-		this.createimeStart=createimeStart;
+	public void setCreatetimeStart(String createtimeStart) {
+		this.createtimeStart=createtimeStart;
 	}
 
-	public String getCreateimeStart() {
-		return this.createimeStart;
+	public String getCreatetimeStart() {
+		return this.createtimeStart;
 	}
 
-	public void setCreateimeEnd(String createimeEnd) {
-		this.createimeEnd=createimeEnd;
+	public void setCreatetimeEnd(String createtimeEnd) {
+		this.createtimeEnd=createtimeEnd;
 	}
 
-	public String getCreateimeEnd() {
-		return this.createimeEnd;
+	public String getCreatetimeEnd() {
+		return this.createtimeEnd;
 	}
 
 	public void setUpdatetimeStart(String updatetimeStart) {

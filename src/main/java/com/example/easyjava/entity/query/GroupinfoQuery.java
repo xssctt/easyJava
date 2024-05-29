@@ -8,7 +8,7 @@ import com.example.easyjava.entity.query.BaseQuery;
 	 *
 	 * @Desoription 群查询对象
 	 * @Auther 摸鱼
-	 * @Date 2024-05-27
+	 * @Date 2024-05-29
 	 */
 public class GroupinfoQuery extends BaseQuery{
 	/** 
