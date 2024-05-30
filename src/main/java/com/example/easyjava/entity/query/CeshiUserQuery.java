@@ -8,7 +8,7 @@ import com.example.easyjava.entity.query.BaseQuery;
 	 *
 	 * @Desoription 用户查询对象
 	 * @Auther 摸鱼
-	 * @Date 2024-05-29
+	 * @Date 2024-05-30
 	 */
 public class CeshiUserQuery extends BaseQuery{
 	/** 

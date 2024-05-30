@@ -71,6 +71,8 @@ public class Constants {
     public static String PACKAGE_SERVICE_IMPL;
     public static String PATH_SERVICE_IMPL;
 
+    public static String PACKAGE_CONTROLLER;
+    public static String PATH_CONTROLLER;
 
 
 
@@ -113,6 +115,9 @@ public class Constants {
         PACKAGE_SERVICE_IMPL=PropertiesUtil.getString("package.service.impl");
         SUFFIX_SERVICE_IMPL=PropertiesUtil.getString("suffix.service.impl");
 
+        PACKAGE_CONTROLLER=PropertiesUtil.getString("package.controller");
+        SUFFIX_BEAN_CONTROLLER=PropertiesUtil.getString("suffix.controller");
+
 //        PACKAGE_MAPPERXML=PropertiesUtil.getString("package.mapperxml");
 
 
@@ -147,6 +152,8 @@ public class Constants {
         PACKAGE_SERVICE_IMPL=PACKAGE_SERVICE+"."+"impl";
         PATH_SERVICE_IMPL=PATH_BASE+"/"+PACKAGE_SERVICE_IMPL.replace(".","/");
 
+        PACKAGE_CONTROLLER=PACKAGE_BASE+"."+PACKAGE_CONTROLLER;
+        PATH_CONTROLLER=PATH_BASE+"/"+PACKAGE_CONTROLLER.replace(".","/");
 
     }
 

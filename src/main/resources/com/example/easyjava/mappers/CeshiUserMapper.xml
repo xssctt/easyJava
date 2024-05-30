@@ -86,7 +86,7 @@
 
 	</select>
 <!--   查询数量 -->
-	<select id="selectCount" resultType="java.lang.Long">
+	<select id="selectCount" resultType="java.lang.Integer">
 		select count(1) from demo_ceshi_user
 		<include refid="query_condition"/>
 	</select>

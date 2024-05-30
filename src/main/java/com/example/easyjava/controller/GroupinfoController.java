@@ -1,25 +1,40 @@
-package com.example.easyjava.service;
+package com.example.easyjava.controller;
 
 import java.util.Date;
 import com.example.easyjava.entity.po.Groupinfo;
 import com.example.easyjava.entity.query.GroupinfoQuery;
 import java.util.List;
+import com.example.easyjava.entity.query.SimplePage;
 import com.example.easyjava.entity.vo.PaginationResultVo;
+import com.example.easyjava.enums.PageSize;
+import com.example.easyjava.service.GroupinfoService;
+
+import javax.annotation.Resource;
+import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import com.example.easyjava.mappers.GroupinfoMapper;
 
 
 	/** 
 	 *
-	 * @Desoription 群service 逻辑层
+	 * @Desoription 群controller 控制层
 	 * @Auther 摸鱼
 	 * @Date 2024-05-30
 	 */
-public interface GroupinfoService {
+@Controller("groupinfoController")
+@RequestMapping("groupinfo")
+public class GroupinfoController {
+
+	@Resource
+	GroupinfoService groupinfoService;
 
 	/** 
 	 *
 	 *  根据条件查询列表
 	 */
-	List<Groupinfo> findListByParam(GroupinfoQuery query);
+@RequestMapping("findListByParam")
+	List<Groupinfo> findListByParam(GroupinfoQuery query){
 	/** 
 	 *
 	 *  根据条件查询多少数量

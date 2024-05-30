@@ -7,7 +7,7 @@ import java.util.Date;
 	 *
 	 * @Desoription 用户mappers
 	 * @Auther 摸鱼
-	 * @Date 2024-05-29
+	 * @Date 2024-05-30
 	 */
 public interface CeshiUserMapper<T, P> extends BaseMapper{
 	/** 

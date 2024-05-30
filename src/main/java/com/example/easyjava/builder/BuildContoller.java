@@ -4,20 +4,20 @@ import com.example.easyjava.Util.StringUtil;
 import com.example.easyjava.bean.Constants;
 import com.example.easyjava.bean.FieIdInfo;
 import com.example.easyjava.bean.TableInfo;
-import com.example.easyjava.entity.po.CeshiUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.io.*;
 import java.util.List;
 import java.util.Map;
 
-public class BuildService {
+public class BuildContoller {
 
-    private static final Logger logger= LoggerFactory.getLogger(BuildService.class);
+    private static final Logger logger= LoggerFactory.getLogger(BuildContoller.class);
     public static void execute(TableInfo tableInfo){
 
-        File folder=new File(Constants.PATH_SERVICE);
+        File folder=new File(Constants.PATH_CONTROLLER);
         if(!folder.exists()){
             //System.out.println("chaungjain");
             folder.mkdirs();
@@ -34,8 +34,21 @@ public class BuildService {
         String classQueryName=tableInfo.getBeanName()+Constants.SUFFIX_BEAN_QUERY;
         //AAA
         String classPoName=tableInfo.getBeanName();
+        //AAAController
+        String className=tableInfo.getBeanName()+Constants.SUFFIX_BEAN_CONTROLLER;
         //AAAService
-        String className=tableInfo.getBeanName()+Constants.SUFFIX_SERVICE;
+        String classNameService=tableInfo.getBeanName()+Constants.SUFFIX_SERVICE;
+        //aAAService
+        String classNameServiceLow=StringUtil.lowCaseFirstLetter(tableInfo.getBeanName()+Constants.SUFFIX_SERVICE);
+        //AAAService
+        String classNameServiceImpl=tableInfo.getBeanName()+Constants.SUFFIX_SERVICE_IMPL;
+        //aAAService
+        String classNameServiceImplLow=StringUtil.lowCaseFirstLetter(tableInfo.getBeanName()+Constants.SUFFIX_SERVICE_IMPL);
+        //AAAMappers
+        String classNameMappers=tableInfo.getBeanName()+Constants.SUFFIX_MAPPERS;
+        //aAAMappers
+        String classNameMappersLow=StringUtil.lowCaseFirstLetter(tableInfo.getBeanName()+Constants.SUFFIX_MAPPERS);
+
         File pofile=new File(folder,className+".java");
 
 
@@ -50,7 +63,7 @@ public class BuildService {
             bufferedWriter=new BufferedWriter(outputStreamWriter);
 
 
-            bufferedWriter.write("package "+Constants.PACKAGE_SERVICE+";");
+            bufferedWriter.write("package "+Constants.PACKAGE_CONTROLLER+";");
             bufferedWriter.newLine();
             bufferedWriter.newLine();
 
@@ -73,23 +86,62 @@ public class BuildService {
             //import java.util.List;
             bufferedWriter.write("import java.util.List;");
             bufferedWriter.newLine();
-
+            //import com.example.easyjava.entity.query.SimplePage;
+            bufferedWriter.write("import "+Constants.PACKAGE_QUERY+".SimplePage;");
+            bufferedWriter.newLine();
+            //import com.example.easyjava.entity.vo.PaginationResultVo;
             bufferedWriter.write("import "+Constants.PACKAGE_VO+".PaginationResultVo;");
             bufferedWriter.newLine();
+            //import com.example.easyjava.enums.PageSize;
+            bufferedWriter.write("import "+Constants.PACKAGE_ENUMS+".PageSize;");
+            bufferedWriter.newLine();
+            //import com.example.easyjava.service.CeshiUserService;
+            bufferedWriter.write("import "+Constants.PACKAGE_SERVICE+"."+classNameService+";");
+            bufferedWriter.newLine();
+            bufferedWriter.newLine();
+            //import javax.annotation.Resource;
+            bufferedWriter.write("import javax.annotation.Resource;");
+            bufferedWriter.newLine();
+            //import org.springframework.stereotype.Service;
+            bufferedWriter.write("import org.springframework.stereotype.Service;");
+            bufferedWriter.newLine();
+            //import org.springframework.stereotype.Controller;
+            bufferedWriter.write("import org.springframework.stereotype.Controller;");
+            bufferedWriter.newLine();
+            //import org.springframework.web.bind.annotation.RequestMapping;
+            bufferedWriter.write("import org.springframework.web.bind.annotation.RequestMapping;");
+            bufferedWriter.newLine();
+            //import import com.example.easyjava.mappers.CeshiUserMapper;
+            bufferedWriter.write("import "+Constants.PACKAGE_MAPPERS+"."+classNameMappers+";");
+            bufferedWriter.newLine();
 
 
             bufferedWriter.newLine();
             bufferedWriter.newLine();
 
-            //类名 public class---
-            BuildComment.createClassComment(bufferedWriter,tableInfo.getComment()+"service 逻辑层");
-            bufferedWriter.write("public interface "+className+" {");
+            //类名 public class---@RequestMapping("/aa")
+            BuildComment.createClassComment(bufferedWriter,tableInfo.getComment()+"controller 控制层");
+            bufferedWriter.write("@Controller(\""+StringUtil.lowCaseFirstLetter(className)+"\")");
+            bufferedWriter.newLine();
+            bufferedWriter.write("@RequestMapping(\""+StringUtil.lowCaseFirstLetter(classPoName)+"\")");
+            bufferedWriter.newLine();
+            bufferedWriter.write("public class "+className+" {");
             bufferedWriter.newLine();
             bufferedWriter.newLine();
+
+            bufferedWriter.write("\t"+"@Resource");
+            bufferedWriter.newLine();
+            bufferedWriter.write("\t"+classNameService+" "+classNameServiceLow+";");
+            bufferedWriter.newLine();
+
+            bufferedWriter.newLine();
+
 
             //List<CeshiUser> findListByParam(CeshiUser param);
             BuildComment.createFieldComment(bufferedWriter,"根据条件查询列表");
-            bufferedWriter.write("\t"+"List<"+classPoName+"> findListByParam("+classQueryName+" query);");
+            bufferedWriter.write("\t"+"@RequestMapping(\"findListByParam\")");
+            bufferedWriter.newLine();
+            bufferedWriter.write("\t"+"List<"+classPoName+"> findListByParam("+classQueryName+" query){");
             bufferedWriter.newLine();
 
 
@@ -119,7 +171,7 @@ public class BuildService {
 
 
 
-           // Integer addOrUpdateBatch(List<CeshiUser> listBean);
+            // Integer addOrUpdateBatch(List<CeshiUser> listBean);
             BuildComment.createFieldComment(bufferedWriter,"批量新增/修改");
             bufferedWriter.write("\t"+"Integer addOrUpdateBatch(List<"+classPoName+"> listBean);");
             bufferedWriter.newLine();
@@ -237,5 +289,4 @@ public class BuildService {
 
 
     }
-
 }

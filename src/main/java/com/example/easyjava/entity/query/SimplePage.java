@@ -7,7 +7,7 @@ import com.example.easyjava.enums.PageSize;
 
 public class SimplePage {
     private int pageNo;
-    private int countTotal;
+    private Integer countTotal;
     private int pageSize;
     private int pageTotal;
     private int start;
@@ -21,7 +21,7 @@ public class SimplePage {
         this.end = end;
     }
 
-    public SimplePage(Integer pageNo, int countTotal, int pageSize) {
+    public SimplePage(Integer pageNo, Integer countTotal, Integer pageSize) {
         if (null == pageNo){
             pageNo=0;
         }
@@ -36,7 +36,7 @@ public class SimplePage {
             this.pageSize = PageSize.SIZE20.getSize();
         }
         if (this.countTotal  > 0){
-            this.pageTotal = this.countTotal % this.pageSize == 0 ? this.countTotal/this.pageSize : this.countTotal / this.pageSize + 1;
+            this.pageTotal = this.countTotal % this.pageSize == 0 ? this.countTotal/this.pageSize : this.countTotal/this.pageSize + 1;
         }else {
             pageTotal = 1;
         }
@@ -60,11 +60,11 @@ public class SimplePage {
         this.pageNo = pageNo;
     }
 
-    public int getCountTotal() {
+    public Integer getCountTotal() {
         return countTotal;
     }
 
-    public void setCountTotal(int countTotal) {
+    public void setCountTotal(Integer countTotal) {
         this.countTotal = countTotal;
         this.action();
     }

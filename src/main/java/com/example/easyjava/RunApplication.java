@@ -20,6 +20,7 @@ public class RunApplication {
 
             BuildService.execute(t);
             BuildServiceImpl.execute(t);
+            BuildContoller.execute(t);
         }
 
     }

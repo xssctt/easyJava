@@ -1,25 +1,40 @@
-package com.example.easyjava.service;
+package com.example.easyjava.controller;
 
 import java.util.Date;
 import com.example.easyjava.entity.po.CeshiUser;
 import com.example.easyjava.entity.query.CeshiUserQuery;
 import java.util.List;
+import com.example.easyjava.entity.query.SimplePage;
 import com.example.easyjava.entity.vo.PaginationResultVo;
+import com.example.easyjava.enums.PageSize;
+import com.example.easyjava.service.CeshiUserService;
+
+import javax.annotation.Resource;
+import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import com.example.easyjava.mappers.CeshiUserMapper;
 
 
 	/** 
 	 *
-	 * @Desoription 用户service 逻辑层
+	 * @Desoription 用户controller 控制层
 	 * @Auther 摸鱼
 	 * @Date 2024-05-30
 	 */
-public interface CeshiUserService {
+@Controller("ceshiUserController")
+@RequestMapping("ceshiUser")
+public class CeshiUserController {
+
+	@Resource
+	CeshiUserService ceshiUserService;
 
 	/** 
 	 *
 	 *  根据条件查询列表
 	 */
-	List<CeshiUser> findListByParam(CeshiUserQuery query);
+@RequestMapping("findListByParam")
+	List<CeshiUser> findListByParam(CeshiUserQuery query){
 	/** 
 	 *
 	 *  根据条件查询多少数量

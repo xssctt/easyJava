@@ -111,7 +111,7 @@ public class BuildMapperXml {
             selectList(bufferedWriter,tableInfo,SELECT_LIST_ID,BASE_RESULT_MAP,BASE_COLUMN_LIST,QUERY_CONDITION);
 
             //查询数量
-            selectCount(bufferedWriter,tableInfo,SELECT_COUNT_ID,BASE_RESULT_LONG,QUERY_CONDITION);
+            selectCount(bufferedWriter,tableInfo,SELECT_COUNT_ID,BASE_RESULT_INTEGER,QUERY_CONDITION);
 
             //插入
             insert(bufferedWriter,tableInfo,INSERT,poClass);

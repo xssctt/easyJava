@@ -13,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 	 *
 	 * @Desoription 用户
 	 * @Auther 摸鱼
-	 * @Date 2024-05-29
+	 * @Date 2024-05-30
 	 */
 public class CeshiUser implements Serializable{
 	/** 
