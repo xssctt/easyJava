@@ -7,7 +7,7 @@ import java.util.Date;
 	 *
 	 * @Desoription 群mappers
 	 * @Auther 摸鱼
-	 * @Date 2024-05-30
+	 * @Date 2024-05-31
 	 */
 public interface GroupinfoMapper<T, P> extends BaseMapper{
 	/** 

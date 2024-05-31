@@ -59,7 +59,10 @@ public class Constants {
 //enum
     public static String PACKAGE_ENUMS;
     public static String PATH_ENUMS;
-
+//exception
+    public static String PACKAGE_EXCEPTION;
+    public static String PATH_EXCEPTION;
+    //  MAPPERS
     public static String PACKAGE_MAPPERS;
     public static String PATH_MAPPERS;
 
@@ -105,6 +108,8 @@ public class Constants {
 
         PACKAGE_UTILS=PropertiesUtil.getString("package.utils");
         PACKAGE_ENUMS=PropertiesUtil.getString("package.enums");
+        PACKAGE_EXCEPTION=PropertiesUtil.getString("package.exception");
+
 
         PACKAGE_MAPPERS=PropertiesUtil.getString("package.mappers");
         SUFFIX_MAPPERS=PropertiesUtil.getString("suffix.mappers");
@@ -140,6 +145,9 @@ public class Constants {
 
         PACKAGE_ENUMS=PACKAGE_BASE+"."+PACKAGE_ENUMS;
         PATH_ENUMS=PATH_BASE+"/"+PACKAGE_ENUMS.replace(".","/");
+
+        PACKAGE_EXCEPTION=PACKAGE_BASE+"."+PACKAGE_EXCEPTION;
+        PATH_EXCEPTION=PATH_BASE+"/"+PACKAGE_EXCEPTION.replace(".","/");
 
         PATH_MAPPER_XML=PATH_BASE_RESOURCES+"/"+PACKAGE_BASE.replace(".","/")+"/"+PACKAGE_MAPPERS;
 
@@ -178,10 +186,8 @@ public class Constants {
 
 
     public static void main(String[] args) {
-        System.out.println(PATH_BASE_RESOURCES);
-        System.out.println(PATH_MAPPER_XML);
-        System.out.println(PATH_BASE);
-        System.out.println(PACKAGE_MAPPERS);
+        System.out.println(PATH_EXCEPTION);
+        System.out.println(PACKAGE_EXCEPTION);
     }
 
 }

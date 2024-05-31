@@ -18,7 +18,7 @@ import com.example.easyjava.mappers.CeshiUserMapper;
 	 *
 	 * @Desoription 用户service 逻辑层
 	 * @Auther 摸鱼
-	 * @Date 2024-05-30
+	 * @Date 2024-05-31
 	 */
 @Service("/ceshiUserService")
 public class CeshiUserServiceImpl implements CeshiUserService{

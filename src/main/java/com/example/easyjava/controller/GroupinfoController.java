@@ -11,74 +11,84 @@ import com.example.easyjava.service.GroupinfoService;
 
 import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import com.example.easyjava.mappers.GroupinfoMapper;
+import com.example.easyjava.controller.ABaseController;
+import com.example.easyjava.entity.vo.ResponseVo;
 
 
 	/** 
 	 *
 	 * @Desoription 群controller 控制层
 	 * @Auther 摸鱼
-	 * @Date 2024-05-30
+	 * @Date 2024-05-31
 	 */
-@Controller("groupinfoController")
-@RequestMapping("groupinfo")
-public class GroupinfoController {
+@RestController("groupinfoController")
+@RequestMapping("/groupinfo")
+public class GroupinfoController extends ABaseController{
 
 	@Resource
-	GroupinfoService groupinfoService;
+	private GroupinfoService groupinfoService;
 
 	/** 
 	 *
-	 *  根据条件查询列表
+	 *  
 	 */
-@RequestMapping("findListByParam")
-	List<Groupinfo> findListByParam(GroupinfoQuery query){
-	/** 
-	 *
-	 *  根据条件查询多少数量
-	 */
-	Integer findCountByParam(GroupinfoQuery query);
-	/** 
-	 *
-	 *  分页查询
-	 */
-	PaginationResultVo<Groupinfo> findListByPage(GroupinfoQuery query);
+	@RequestMapping("//loadDateList")
+	public ResponseVo loadDataList(GroupinfoQuery query){
+		return getSuccessResponseVo(groupinfoService.findListByParam(query));
+	}
 	/** 
 	 *
 	 *  新增
 	 */
-	Integer add(Groupinfo bean);
+	@RequestMapping("/add")
+	public ResponseVo add(Groupinfo bean){
+		return getSuccessResponseVo(groupinfoService.add(bean));
+	}
 	/** 
 	 *
 	 *  批量新增
 	 */
-	Integer addBatch(List<Groupinfo> listBean);
+	@RequestMapping("/addBatch")
+	public ResponseVo addBatch(@RequestBody List<Groupinfo> listBean){
+		return getSuccessResponseVo(groupinfoService.addBatch(listBean));
+	}
 	/** 
 	 *
 	 *  批量新增/修改
 	 */
-	Integer addOrUpdateBatch(List<Groupinfo> listBean);
+	@RequestMapping("/addOrUpdateBatch")
+	public ResponseVo addOrUpdateBatch(@RequestBody List<Groupinfo> listBean){
+		return getSuccessResponseVo(groupinfoService.addOrUpdateBatch(listBean));
+	}
 	/** 
 	 *
 	 *  根据Groupid查询
 	 */
-
-	Groupinfo getGroupinfoByGroupid(String groupid);
+	@RequestMapping("/getGroupinfoByGroupid")
+	public ResponseVo getGroupinfoByGroupid(String groupid){
+		return getSuccessResponseVo(groupinfoService.getGroupinfoByGroupid(groupid));
+	}
 
 	/** 
 	 *
 	 *  根据Groupid更新
 	 */
-
-	Integer updateGroupinfoByGroupid(Groupinfo bean, String groupid);
+	@RequestMapping("/updateGroupinfoByGroupid")
+	public ResponseVo updateGroupinfoByGroupid(Groupinfo bean, String groupid){
+		return getSuccessResponseVo(groupinfoService.updateGroupinfoByGroupid(bean,groupid));
+	}
 
 	/** 
 	 *
 	 *  根据Groupid删除
 	 */
-
-	Integer deleteGroupinfoByGroupid(String groupid);
+	@RequestMapping("/deleteGroupinfoByGroupid")
+	public ResponseVo deleteGroupinfoByGroupid(String groupid){
+		return getSuccessResponseVo(groupinfoService.deleteGroupinfoByGroupid(groupid));
+	}
 
 }

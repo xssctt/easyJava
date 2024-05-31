@@ -106,13 +106,22 @@ public class BuildContoller {
             bufferedWriter.write("import org.springframework.stereotype.Service;");
             bufferedWriter.newLine();
             //import org.springframework.stereotype.Controller;
-            bufferedWriter.write("import org.springframework.stereotype.Controller;");
+            bufferedWriter.write("import org.springframework.web.bind.annotation.RestController;");
             bufferedWriter.newLine();
             //import org.springframework.web.bind.annotation.RequestMapping;
             bufferedWriter.write("import org.springframework.web.bind.annotation.RequestMapping;");
             bufferedWriter.newLine();
+            //import org.springframework.web.bind.annotation.RequestBody;
+            bufferedWriter.write("import org.springframework.web.bind.annotation.RequestBody;");
+            bufferedWriter.newLine();
             //import import com.example.easyjava.mappers.CeshiUserMapper;
             bufferedWriter.write("import "+Constants.PACKAGE_MAPPERS+"."+classNameMappers+";");
+            bufferedWriter.newLine();
+            //import com.example.easyjava.controller.ABaseController;
+            bufferedWriter.write("import "+Constants.PACKAGE_CONTROLLER+".ABaseController;");
+            bufferedWriter.newLine();
+            //import com.example.easyjava.entity.vo.ResponseVo;
+            bufferedWriter.write("import "+Constants.PACKAGE_VO+".ResponseVo;");
             bufferedWriter.newLine();
 
 
@@ -121,80 +130,74 @@ public class BuildContoller {
 
             //类名 public class---@RequestMapping("/aa")
             BuildComment.createClassComment(bufferedWriter,tableInfo.getComment()+"controller 控制层");
-            bufferedWriter.write("@Controller(\""+StringUtil.lowCaseFirstLetter(className)+"\")");
+            bufferedWriter.write("@RestController(\""+StringUtil.lowCaseFirstLetter(className)+"\")");
             bufferedWriter.newLine();
-            bufferedWriter.write("@RequestMapping(\""+StringUtil.lowCaseFirstLetter(classPoName)+"\")");
+            bufferedWriter.write("@RequestMapping(\"/"+StringUtil.lowCaseFirstLetter(classPoName)+"\")");
             bufferedWriter.newLine();
-            bufferedWriter.write("public class "+className+" {");
+            bufferedWriter.write("public class "+className+" extends ABaseController{");
             bufferedWriter.newLine();
             bufferedWriter.newLine();
+
 
             bufferedWriter.write("\t"+"@Resource");
             bufferedWriter.newLine();
-            bufferedWriter.write("\t"+classNameService+" "+classNameServiceLow+";");
+            bufferedWriter.write("\t"+"private "+classNameService+" "+classNameServiceLow+";");
+            bufferedWriter.newLine();
+            bufferedWriter.newLine();
+            //-------------------------------------------------------------------------
+
+            //	@RequestMapping("/loadDataList")
+            //	public ResponseVo loadDataList(CeshiUserQuery query){
+            //		return getSuccessResponseVo(ceshiUserService.findListByParam(query));
+            //	}
+            BuildComment.createFieldComment(bufferedWriter,"");
+            getRequestMapping(bufferedWriter,"loadDateList");
+            bufferedWriter.write("\t"+"public ResponseVo loadDataList("+classQueryName+" query){");
             bufferedWriter.newLine();
 
+            bufferedWriter.write("\t\t"+"return getSuccessResponseVo("+classNameServiceLow+".findListByParam(query));");
             bufferedWriter.newLine();
-
-
-            //List<CeshiUser> findListByParam(CeshiUser param);
-            BuildComment.createFieldComment(bufferedWriter,"根据条件查询列表");
-            bufferedWriter.write("\t"+"@RequestMapping(\"findListByParam\")");
+            bufferedWriter.write("\t"+"}");
             bufferedWriter.newLine();
-            bufferedWriter.write("\t"+"List<"+classPoName+"> findListByParam("+classQueryName+" query){");
-            bufferedWriter.newLine();
-
-
-            //Integer findCountByParam(CeshiUser param);
-            BuildComment.createFieldComment(bufferedWriter,"根据条件查询多少数量");
-            bufferedWriter.write("\t"+"Integer findCountByParam("+classQueryName+" query);");
-            bufferedWriter.newLine();
-
-            //
-            //PaginationResultVo<CeshiUser> findListByPage(classQueryName param);
-            BuildComment.createFieldComment(bufferedWriter,"分页查询");
-            bufferedWriter.write("\t"+"PaginationResultVo<"+classPoName+"> findListByPage("+classQueryName+" query);");
-            bufferedWriter.newLine();
-
-
+            //-------------------------------------------------------------------------
 
             //Integer add(CeshiUser bean);
             BuildComment.createFieldComment(bufferedWriter,"新增");
-            bufferedWriter.write("\t"+"Integer add("+classPoName+" bean);");
+            getRequestMapping(bufferedWriter,"add");
+            bufferedWriter.write("\t"+"public ResponseVo add("+classPoName+" bean){");
             bufferedWriter.newLine();
 
+            //return this.ceshiUserMapper.insert(bean);
+            bufferedWriter.write("\t\t"+"return getSuccessResponseVo("+classNameServiceLow+".add(bean));");
+            bufferedWriter.newLine();
+            bufferedWriter.write("\t"+"}");
+            bufferedWriter.newLine();
+            //-------------------------------------------------------------------------
 
             //Integer addBatch(List<CeshiUser> listBean);
             BuildComment.createFieldComment(bufferedWriter,"批量新增");
-            bufferedWriter.write("\t"+"Integer addBatch(List<"+classPoName+"> listBean);");
+            getRequestMapping(bufferedWriter,"addBatch");
+            bufferedWriter.write("\t"+"public ResponseVo addBatch(@RequestBody List<"+classPoName+"> listBean){");
             bufferedWriter.newLine();
-
-
+            bufferedWriter.write("\t\t"+"return getSuccessResponseVo("+classNameServiceLow+".addBatch(listBean));");
+            bufferedWriter.newLine();
+            bufferedWriter.write("\t"+"}");
+            bufferedWriter.newLine();
+            //-------------------------------------------------------------------------
 
             // Integer addOrUpdateBatch(List<CeshiUser> listBean);
             BuildComment.createFieldComment(bufferedWriter,"批量新增/修改");
-            bufferedWriter.write("\t"+"Integer addOrUpdateBatch(List<"+classPoName+"> listBean);");
+            getRequestMapping(bufferedWriter,"addOrUpdateBatch");
+            bufferedWriter.write("\t"+"public ResponseVo addOrUpdateBatch(@RequestBody List<"+classPoName+"> listBean){");
             bufferedWriter.newLine();
 
 
-//            //CeshiUser getCeshiById(Integer id);
-//            BuildComment.createFieldComment(bufferedWriter,"根据ID查询对象");
-//            bufferedWriter.write("\t"+""+classPoName+" get"+classPoName+"ById(Integer id);");
-//            bufferedWriter.newLine();
-//
-//
-//
-//            //Integer updateCeshiById(CeshiUser bean,Integer id);
-//            BuildComment.createFieldComment(bufferedWriter,"根据ID修改对象");
-//            bufferedWriter.write("\t"+"Integer update"+classPoName+"ById("+classPoName+" bean,Integer id);");
-//            bufferedWriter.newLine();
-//
-//
-//
-//            //Integer deleteCeshiById(Integer id);
-//            BuildComment.createFieldComment(bufferedWriter,"根据ID删除对象");
-//            bufferedWriter.write("\t"+"Integer delete"+classPoName+"ById(Integer id);");
-//            bufferedWriter.newLine();
+            bufferedWriter.write("\t\t"+"return getSuccessResponseVo("+classNameServiceLow+".addOrUpdateBatch(listBean));");
+            bufferedWriter.newLine();
+            bufferedWriter.write("\t"+"}");
+            bufferedWriter.newLine();
+
+
 
 
             Map<String, List<FieIdInfo>> keyIndexMap = tableInfo.getKeyIndexMap();
@@ -208,6 +211,7 @@ public class BuildContoller {
                 Integer index=0;
                 StringBuilder methodName=new StringBuilder();
                 StringBuilder methodParams=new StringBuilder();
+                StringBuilder methodquery=new StringBuilder();
 
                 //不同的索引 不同的字段list
                 for (FieIdInfo f:keyFieIdInfoList) {
@@ -221,9 +225,11 @@ public class BuildContoller {
                     //   @Param("bean") T t
 //                    methodParams.append( "@Param(\""+f.getPropertyName()+"\") "+f.getJavaType()+" " +f.getPropertyName()+",");
                     methodParams.append( f.getJavaType()+" " +f.getPropertyName());
+                    methodquery.append(f.getPropertyName());
                     //**********
                     if (index<keyFieIdInfoList.size()){
                         methodParams.append(", ");
+                        methodquery.append(", ");
                     }
 
                 }
@@ -233,26 +239,51 @@ public class BuildContoller {
 //                    methodParams.delete(lastCommaIndex, methodParams.length());
 //                }
 
+                //-------------------------------------------------------------------------
 
                 BuildComment.createFieldComment(bufferedWriter,"根据"+methodName+"查询");
+                getRequestMapping(bufferedWriter,"get"+classPoName+"By"+methodName);
+                bufferedWriter.write("\t"+"public ResponseVo get"+classPoName+"By"+methodName+"("+methodParams+"){");
                 bufferedWriter.newLine();
-                bufferedWriter.write("\t"+classPoName+" get"+classPoName+"By"+methodName+"("+methodParams+");");
+
+                //return this.ceshiUserMapper.selectById(id);
+                bufferedWriter.write("\t\t"+"return getSuccessResponseVo("+classNameServiceLow+".get"+classPoName+"By"+methodName+"("+methodquery+"));");
+                bufferedWriter.newLine();
+                bufferedWriter.write("\t"+"}");
                 bufferedWriter.newLine();
                 bufferedWriter.newLine();
+                //-------------------------------------------------------------------------
 
                 BuildComment.createFieldComment(bufferedWriter,"根据"+methodName+"更新");
-                bufferedWriter.newLine();
-                bufferedWriter.write("\t"+"Integer update"+classPoName+"By"+methodName+"("+classPoName+" bean, "+methodParams+");");
-                bufferedWriter.newLine();
+                getRequestMapping(bufferedWriter,"update"+classPoName+"By"+methodName);
+                bufferedWriter.write("\t"+"public ResponseVo update"+classPoName+"By"+methodName+"("+classPoName+" bean, "+methodParams+"){");
                 bufferedWriter.newLine();
 
-                BuildComment.createFieldComment(bufferedWriter,"根据"+methodName+"删除");
+                //return this.ceshiUserMapper.updateById(bean,id);
+                bufferedWriter.write("\t\t"+"return getSuccessResponseVo("+classNameServiceLow+".update"+classPoName+"By"+methodName+"(bean,"+methodquery+"));");
                 bufferedWriter.newLine();
-                bufferedWriter.write("\t"+"Integer delete"+classPoName+"By"+methodName+"("+methodParams+");");
+                bufferedWriter.write("\t"+"}");
+                bufferedWriter.newLine();
+                bufferedWriter.newLine();
+                //-------------------------------------------------------------------------
+
+                BuildComment.createFieldComment(bufferedWriter,"根据"+methodName+"删除");
+                getRequestMapping(bufferedWriter,"delete"+classPoName+"By"+methodName);
+                bufferedWriter.write("\t"+"public ResponseVo delete"+classPoName+"By"+methodName+"("+methodParams+"){");
+                bufferedWriter.newLine();
+
+                //return this.ceshiUserMapper.deleteById(id);
+                bufferedWriter.write("\t\t"+"return getSuccessResponseVo("+classNameServiceLow+".delete"+classPoName+"By"+methodName+"("+methodquery+"));");
+                bufferedWriter.newLine();
+                bufferedWriter.write("\t"+"}");
                 bufferedWriter.newLine();
                 bufferedWriter.newLine();
 
             }
+
+
+
+
 
 
 
@@ -289,4 +320,11 @@ public class BuildContoller {
 
 
     }
+
+    private static void getRequestMapping(BufferedWriter bufferedWriter,String url) throws IOException {
+        bufferedWriter.write("\t"+"@RequestMapping(\"/"+url+"\")");
+        bufferedWriter.newLine();
+
+    }
+
 }

@@ -51,6 +51,48 @@ public class BuilBase {
         HeadInfoList.clear();
         HeadInfoList.add("package "+Constants.PACKAGE_VO+";");
         build(HeadInfoList,"PaginationResultVo", Constants.PATH_VO);
+
+        //ResponseCodeEnum
+        HeadInfoList.clear();
+        HeadInfoList.add("package "+Constants.PACKAGE_ENUMS+";");
+        build(HeadInfoList,"ResponseCodeEnum", Constants.PATH_ENUMS);
+
+        //ResponseVo
+        HeadInfoList.clear();
+        HeadInfoList.add("package "+Constants.PACKAGE_VO+";");
+        build(HeadInfoList,"ResponseVo", Constants.PATH_VO);
+
+        //BusinessException
+        HeadInfoList.clear();
+        HeadInfoList.add("package "+Constants.PACKAGE_EXCEPTION+";");
+        HeadInfoList.add("import "+Constants.PACKAGE_ENUMS+".ResponseCodeEnum;");
+        build(HeadInfoList,"BusinessException", Constants.PATH_EXCEPTION);
+
+
+        //ABaseController
+        //import com.example.easyjava.entity.vo.ResponseVo;
+        //import com.example.easyjava.enums.ResponseCodeEnum;
+        //import com.example.easyjava.exception.BusinessException;
+        HeadInfoList.clear();
+        HeadInfoList.add("package "+Constants.PACKAGE_CONTROLLER+";");
+        HeadInfoList.add("import "+Constants.PACKAGE_VO+".ResponseVo;");
+        HeadInfoList.add("import "+Constants.PACKAGE_ENUMS+".ResponseCodeEnum;");
+        HeadInfoList.add("import "+Constants.PACKAGE_EXCEPTION+".BusinessException;");
+        build(HeadInfoList,"ABaseController", Constants.PATH_CONTROLLER);
+
+        //AGlobalExceptionHandlerController
+        //import com.example.easyjava.entity.vo.ResponseVo;
+        //import com.example.easyjava.enums.ResponseCodeEnum;
+        //import com.example.easyjava.exception.BusinessException;
+        HeadInfoList.clear();
+        HeadInfoList.add("package "+Constants.PACKAGE_CONTROLLER+";");
+        HeadInfoList.add("import "+Constants.PACKAGE_VO+".ResponseVo;");
+        HeadInfoList.add("import "+Constants.PACKAGE_ENUMS+".ResponseCodeEnum;");
+        HeadInfoList.add("import "+Constants.PACKAGE_EXCEPTION+".BusinessException;");
+        build(HeadInfoList,"AGlobalExceptionHandlerController", Constants.PATH_CONTROLLER);
+
+
+
     }
 
     /**

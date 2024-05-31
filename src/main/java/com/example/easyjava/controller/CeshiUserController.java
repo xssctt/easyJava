@@ -11,116 +11,138 @@ import com.example.easyjava.service.CeshiUserService;
 
 import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import com.example.easyjava.mappers.CeshiUserMapper;
+import com.example.easyjava.controller.ABaseController;
+import com.example.easyjava.entity.vo.ResponseVo;
 
 
 	/** 
 	 *
 	 * @Desoription 用户controller 控制层
 	 * @Auther 摸鱼
-	 * @Date 2024-05-30
+	 * @Date 2024-05-31
 	 */
-@Controller("ceshiUserController")
-@RequestMapping("ceshiUser")
-public class CeshiUserController {
+@RestController("ceshiUserController")
+@RequestMapping("/ceshiUser")
+public class CeshiUserController extends ABaseController{
 
 	@Resource
-	CeshiUserService ceshiUserService;
+	private CeshiUserService ceshiUserService;
 
 	/** 
 	 *
-	 *  根据条件查询列表
+	 *  
 	 */
-@RequestMapping("findListByParam")
-	List<CeshiUser> findListByParam(CeshiUserQuery query){
-	/** 
-	 *
-	 *  根据条件查询多少数量
-	 */
-	Integer findCountByParam(CeshiUserQuery query);
-	/** 
-	 *
-	 *  分页查询
-	 */
-	PaginationResultVo<CeshiUser> findListByPage(CeshiUserQuery query);
+	@RequestMapping("//loadDateList")
+	public ResponseVo loadDataList(CeshiUserQuery query){
+		return getSuccessResponseVo(ceshiUserService.findListByParam(query));
+	}
 	/** 
 	 *
 	 *  新增
 	 */
-	Integer add(CeshiUser bean);
+	@RequestMapping("/add")
+	public ResponseVo add(CeshiUser bean){
+		return getSuccessResponseVo(ceshiUserService.add(bean));
+	}
 	/** 
 	 *
 	 *  批量新增
 	 */
-	Integer addBatch(List<CeshiUser> listBean);
+	@RequestMapping("/addBatch")
+	public ResponseVo addBatch(@RequestBody List<CeshiUser> listBean){
+		return getSuccessResponseVo(ceshiUserService.addBatch(listBean));
+	}
 	/** 
 	 *
 	 *  批量新增/修改
 	 */
-	Integer addOrUpdateBatch(List<CeshiUser> listBean);
+	@RequestMapping("/addOrUpdateBatch")
+	public ResponseVo addOrUpdateBatch(@RequestBody List<CeshiUser> listBean){
+		return getSuccessResponseVo(ceshiUserService.addOrUpdateBatch(listBean));
+	}
 	/** 
 	 *
 	 *  根据Id查询
 	 */
-
-	CeshiUser getCeshiUserById(Integer id);
+	@RequestMapping("/getCeshiUserById")
+	public ResponseVo getCeshiUserById(Integer id){
+		return getSuccessResponseVo(ceshiUserService.getCeshiUserById(id));
+	}
 
 	/** 
 	 *
 	 *  根据Id更新
 	 */
-
-	Integer updateCeshiUserById(CeshiUser bean, Integer id);
+	@RequestMapping("/updateCeshiUserById")
+	public ResponseVo updateCeshiUserById(CeshiUser bean, Integer id){
+		return getSuccessResponseVo(ceshiUserService.updateCeshiUserById(bean,id));
+	}
 
 	/** 
 	 *
 	 *  根据Id删除
 	 */
-
-	Integer deleteCeshiUserById(Integer id);
+	@RequestMapping("/deleteCeshiUserById")
+	public ResponseVo deleteCeshiUserById(Integer id){
+		return getSuccessResponseVo(ceshiUserService.deleteCeshiUserById(id));
+	}
 
 	/** 
 	 *
 	 *  根据IdAndName查询
 	 */
-
-	CeshiUser getCeshiUserByIdAndName(Integer id, String name);
+	@RequestMapping("/getCeshiUserByIdAndName")
+	public ResponseVo getCeshiUserByIdAndName(Integer id, String name){
+		return getSuccessResponseVo(ceshiUserService.getCeshiUserByIdAndName(id, name));
+	}
 
 	/** 
 	 *
 	 *  根据IdAndName更新
 	 */
-
-	Integer updateCeshiUserByIdAndName(CeshiUser bean, Integer id, String name);
+	@RequestMapping("/updateCeshiUserByIdAndName")
+	public ResponseVo updateCeshiUserByIdAndName(CeshiUser bean, Integer id, String name){
+		return getSuccessResponseVo(ceshiUserService.updateCeshiUserByIdAndName(bean,id, name));
+	}
 
 	/** 
 	 *
 	 *  根据IdAndName删除
 	 */
-
-	Integer deleteCeshiUserByIdAndName(Integer id, String name);
+	@RequestMapping("/deleteCeshiUserByIdAndName")
+	public ResponseVo deleteCeshiUserByIdAndName(Integer id, String name){
+		return getSuccessResponseVo(ceshiUserService.deleteCeshiUserByIdAndName(id, name));
+	}
 
 	/** 
 	 *
 	 *  根据SexAndId查询
 	 */
-
-	CeshiUser getCeshiUserBySexAndId(Integer sex, Integer id);
+	@RequestMapping("/getCeshiUserBySexAndId")
+	public ResponseVo getCeshiUserBySexAndId(Integer sex, Integer id){
+		return getSuccessResponseVo(ceshiUserService.getCeshiUserBySexAndId(sex, id));
+	}
 
 	/** 
 	 *
 	 *  根据SexAndId更新
 	 */
-
-	Integer updateCeshiUserBySexAndId(CeshiUser bean, Integer sex, Integer id);
+	@RequestMapping("/updateCeshiUserBySexAndId")
+	public ResponseVo updateCeshiUserBySexAndId(CeshiUser bean, Integer sex, Integer id){
+		return getSuccessResponseVo(ceshiUserService.updateCeshiUserBySexAndId(bean,sex, id));
+	}
 
 	/** 
 	 *
 	 *  根据SexAndId删除
 	 */
-
-	Integer deleteCeshiUserBySexAndId(Integer sex, Integer id);
+	@RequestMapping("/deleteCeshiUserBySexAndId")
+	public ResponseVo deleteCeshiUserBySexAndId(Integer sex, Integer id){
+		return getSuccessResponseVo(ceshiUserService.deleteCeshiUserBySexAndId(sex, id));
+	}
 
 }

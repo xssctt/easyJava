@@ -11,7 +11,7 @@ import com.example.easyjava.entity.vo.PaginationResultVo;
 	 *
 	 * @Desoription 用户service 逻辑层
 	 * @Auther 摸鱼
-	 * @Date 2024-05-30
+	 * @Date 2024-05-31
 	 */
 public interface CeshiUserService {
 
