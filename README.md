@@ -10,7 +10,7 @@
 
 
 
-## 使用源码请支付10元
+## 使用源码给点钱钱
 ![image-20240528154320599](https://raw.githubusercontent.com/xssctt/typora_image/main/img/202405281543097.png)
 
 ## wechat--> CTSXST
