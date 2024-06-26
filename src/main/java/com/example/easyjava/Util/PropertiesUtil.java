@@ -32,7 +32,7 @@ public class PropertiesUtil {
 
 
         }catch (Exception e){
-
+            e.printStackTrace();
         }finally {
 
             if (is!=null){

@@ -432,7 +432,7 @@ public class BuildMapperXml {
             }
         }
         if (autoIncrementField != null){
-            bufferedWriter.write("\t\t"+"<selectKey keyProperty=\"bean."+autoIncrementField.getFieIdName()+"\" resultType=\""+autoIncrementField.getJavaType()+"\" order=\"AFTER\"> ");
+            bufferedWriter.write("\t\t"+"<selectKey keyProperty=\"bean."+autoIncrementField.getPropertyName()+"\" resultType=\""+autoIncrementField.getJavaType()+"\" order=\"AFTER\"> ");
             bufferedWriter.newLine();
             bufferedWriter.write("\t\t\t"+"select LAST_INSERT_ID()");
             bufferedWriter.newLine();
@@ -592,6 +592,8 @@ public class BuildMapperXml {
         StringBuilder valuesString=new StringBuilder();
         for (FieIdInfo f: tableInfo.getFieIddList()) {
 
+
+
             indea++;
             //去除 索引字段的更新权限
             if(keyTemp.get(f.getFieIdName()) != null){
@@ -600,12 +602,17 @@ public class BuildMapperXml {
 
             bufferedWriter.write("\t\t\t"+"<if test=\"bean."+f.getPropertyName()+" != null\"> ");
             bufferedWriter.newLine();
+
             valuesString.append(f.getFieIdName()+"= VALUES("+f.getFieIdName()+")");
             if(indea < tableInfo.getFieIddList().size()){
                 valuesString.append(",");
             }
             bufferedWriter.write("\t\t\t\t"+valuesString);
             bufferedWriter.newLine();
+
+            //每个使用一次  所以清空  对 ,  的美观处理
+            valuesString.delete(0, valuesString.length());
+
             bufferedWriter.write("\t\t\t"+"</if>");
             bufferedWriter.newLine();
         }
@@ -683,6 +690,7 @@ public class BuildMapperXml {
                 stringValues.append(",");
             }
         }
+
         bufferedWriter.write("\t\t"+"(");
         bufferedWriter.newLine();
         bufferedWriter.write("\t\t"+stringValues);
@@ -713,6 +721,7 @@ public class BuildMapperXml {
 //---------------------------------------------------------------
 
 
+        // ( ----- ------------------------)
         StringBuilder stringItem=new StringBuilder();
         stringItem.append("(");
 //        Integer dex=0;
@@ -762,8 +771,9 @@ public class BuildMapperXml {
 //                stringValues.append(",");
 //            }
 //        }
-        String stringValues=getFiledStringPropertyName(tableInfo,"#{item.","}",false);
 
+        String stringValues=getFiledStringPropertyName(tableInfo,"#{item.","}",false);
+//       stringValues  (--------------------------------)
 
         bufferedWriter.write("\t\t"+"(");
         bufferedWriter.newLine();
@@ -813,6 +823,7 @@ public class BuildMapperXml {
             }
 
             duplicateString.append("\t\t"+f.getFieIdName()+"= VALUES("+f.getFieIdName()+")");
+
             if(inda < tableInfo.getFieIddList().size()){
                 duplicateString.append(",\n");
             }
@@ -935,6 +946,7 @@ public class BuildMapperXml {
             //set sqlfieldid=bean.values,
             bufferedWriter.write("\t\t"+"<set>");
             bufferedWriter.newLine();
+
             Integer listindex=0;
             StringBuilder valueString=new StringBuilder();
             for (FieIdInfo f:tableInfo.getFieIddList()) {
@@ -943,6 +955,7 @@ public class BuildMapperXml {
 
                 bufferedWriter.write("\t\t\t"+"<if test=\"bean."+f.getPropertyName()+" != null\" >");
                 bufferedWriter.newLine();
+
                 valueString.append(f.getFieIdName()+"=#{bean."+f.getPropertyName()+"}");
 
                 if (listindex < tableInfo.getFieIddList().size()){
@@ -976,7 +989,7 @@ public class BuildMapperXml {
 
             //<delete id="deleteBy"+methodName" parameterType="">
             //    </delete>
-            bufferedWriter.write("\t"+"<delete id= \"deleteBy"+methodName+"\" parameterType=\""+BASE_RESULT_INTEGER+"\">");
+            bufferedWriter.write("\t"+"<delete id= \"deleteBy"+methodName+"\">");
             bufferedWriter.newLine();
 
             bufferedWriter.write("\t\t"+"delete from "+tableInfo.getTableName()+" where "+paramsName);

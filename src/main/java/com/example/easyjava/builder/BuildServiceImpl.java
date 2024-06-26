@@ -109,7 +109,7 @@ public class BuildServiceImpl{
             //类名 public class---
             //@Service("ceshiUserService")
             BuildComment.createClassComment(bufferedWriter,tableInfo.getComment()+"service 逻辑层");
-            bufferedWriter.write("@Service(\"/"+StringUtil.lowCaseFirstLetter(classNameService)+"\")");
+            bufferedWriter.write("@Service(\""+StringUtil.lowCaseFirstLetter(classNameService)+"\")");
             bufferedWriter.newLine();
             bufferedWriter.write("public class "+className+" implements "+classNameService+"{");
             bufferedWriter.newLine();
@@ -127,6 +127,9 @@ public class BuildServiceImpl{
 
             //List<CeshiUser> findListByParam(CeshiUser param);
             BuildComment.createFieldComment(bufferedWriter,"根据条件查询列表");
+            //@Override
+            bufferedWriter.write("\t"+"@Override");
+            bufferedWriter.newLine();
             bufferedWriter.write("\t"+"public List<"+classPoName+"> findListByParam("+classQueryName+" query){");
             bufferedWriter.newLine();
 
@@ -139,6 +142,9 @@ public class BuildServiceImpl{
 
             //Integer findCountByParam(CeshiUser param);
             BuildComment.createFieldComment(bufferedWriter,"根据条件查询多少数量");
+            //@Override
+            bufferedWriter.write("\t"+"@Override");
+            bufferedWriter.newLine();
             bufferedWriter.write("\t"+"public Integer findCountByParam("+classQueryName+" query){");
             bufferedWriter.newLine();
 
@@ -150,6 +156,9 @@ public class BuildServiceImpl{
             //
             //PaginationResultVo<CeshiUser> findListByPage(classQueryName param);
             BuildComment.createFieldComment(bufferedWriter,"分页查询");
+            //@Override
+            bufferedWriter.write("\t"+"@Override");
+            bufferedWriter.newLine();
             bufferedWriter.write("\t"+"public PaginationResultVo<"+classPoName+"> findListByPage("+classQueryName+" query){");
             bufferedWriter.newLine();
             //Integer count=this.findCountByParam(query);
@@ -179,6 +188,9 @@ public class BuildServiceImpl{
 
             //Integer add(CeshiUser bean);
             BuildComment.createFieldComment(bufferedWriter,"新增");
+            //@Override
+            bufferedWriter.write("\t"+"@Override");
+            bufferedWriter.newLine();
             bufferedWriter.write("\t"+"public Integer add("+classPoName+" bean){");
             bufferedWriter.newLine();
 
@@ -190,6 +202,9 @@ public class BuildServiceImpl{
 
             //Integer addBatch(List<CeshiUser> listBean);
             BuildComment.createFieldComment(bufferedWriter,"批量新增");
+            //@Override
+            bufferedWriter.write("\t"+"@Override");
+            bufferedWriter.newLine();
             bufferedWriter.write("\t"+"public Integer addBatch(List<"+classPoName+"> listBean){");
             bufferedWriter.newLine();
             //if (listBean == null || listBean.isEmpty()){
@@ -210,6 +225,9 @@ public class BuildServiceImpl{
 
             // Integer addOrUpdateBatch(List<CeshiUser> listBean);
             BuildComment.createFieldComment(bufferedWriter,"批量新增/修改");
+            //@Override
+            bufferedWriter.write("\t"+"@Override");
+            bufferedWriter.newLine();
             bufferedWriter.write("\t"+"public Integer addOrUpdateBatch(List<"+classPoName+"> listBean){");
             bufferedWriter.newLine();
 
@@ -290,6 +308,9 @@ public class BuildServiceImpl{
 
                 BuildComment.createFieldComment(bufferedWriter,"根据"+methodName+"查询");
                 bufferedWriter.newLine();
+                //@Override
+                bufferedWriter.write("\t"+"@Override");
+                bufferedWriter.newLine();
                 bufferedWriter.write("\t"+"public "+classPoName+" get"+classPoName+"By"+methodName+"("+methodParams+"){");
                 bufferedWriter.newLine();
 
@@ -302,6 +323,9 @@ public class BuildServiceImpl{
 
                 BuildComment.createFieldComment(bufferedWriter,"根据"+methodName+"更新");
                 bufferedWriter.newLine();
+                //@Override
+                bufferedWriter.write("\t"+"@Override");
+                bufferedWriter.newLine();
                 bufferedWriter.write("\t"+"public Integer update"+classPoName+"By"+methodName+"("+classPoName+" bean, "+methodParams+"){");
                 bufferedWriter.newLine();
 
@@ -313,6 +337,9 @@ public class BuildServiceImpl{
                 bufferedWriter.newLine();
 
                 BuildComment.createFieldComment(bufferedWriter,"根据"+methodName+"删除");
+                bufferedWriter.newLine();
+                //@Override
+                bufferedWriter.write("\t"+"@Override");
                 bufferedWriter.newLine();
                 bufferedWriter.write("\t"+"public Integer delete"+classPoName+"By"+methodName+"("+methodParams+"){");
                 bufferedWriter.newLine();
