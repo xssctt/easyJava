@@ -52,6 +52,9 @@ public class BuildMapper {
             bufferedWriter.newLine();
             bufferedWriter.write("import org.apache.ibatis.annotations.Param;");
             bufferedWriter.newLine();
+            bufferedWriter.write("import org.apache.ibatis.annotations.Mapper;");
+            bufferedWriter.newLine();
+
 
 
 //            for (Map.Entry<String, List<FieIdInfo>> entry:  tableInfo.getKeyIndexMap().entrySet()) {
@@ -87,6 +90,8 @@ public class BuildMapper {
 
 
             BuildComment.createClassComment(bufferedWriter,tableInfo.getComment()+ "mappers");
+            bufferedWriter.write("@Mapper");
+            bufferedWriter.newLine();
             bufferedWriter.write("public interface "+className+"<T, P> extends BaseMapper{");
             bufferedWriter.newLine();
 
